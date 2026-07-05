@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "soultether",
+	"version": "${version}",
+	"name": "Soul Tether",
+	"description": "Transports your inventory to a chosen location on death.",
+	"authors": [
+		"TheWarior73"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/soultether/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.thewarior73.soultether.SoulTether"
+		],
+		"client": [
+			"com.thewarior73.soultether.client.SoulTetherClient"
+		]
+	},
+	"mixins": [
+		"soultether.mixins.json",
+		{
+			"config": "soultether.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

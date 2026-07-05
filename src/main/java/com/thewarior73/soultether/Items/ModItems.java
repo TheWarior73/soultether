@@ -1,0 +1,57 @@
+package com.thewarior73.soultether.Items;
+
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.function.Function;
+
+import static com.thewarior73.soultether.SoulTether.MOD_ID;
+
+public class ModItems {
+
+    // Loads the class at runtime
+    public static void initialize() {
+        // region register_creative_tab
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CUSTOM_CREATIVE_TAB_KEY, CUSTOM_CREATIVE_TAB);
+        // endregion register_creative_tab
+    }
+
+    public static Item register(ResourceKey<Item> itemKey, Function<Item.Properties, Item> itemFactory, Item.Properties settings) {
+        Item item = itemFactory.apply(settings.setId(itemKey));
+
+        Registry.register(BuiltInRegistries.ITEM, itemKey, item);
+
+        return item;
+    }
+
+    public static final Item SOUL_TETHER = register(ModItemIDs.SOUL_TETHER, SoulTetherItem::new, new Item.Properties());
+    public static final Item THUNDER_STICK = register(ModItemIDs.THUNDER_STICK, ThunderStickItem::new, new Item.Properties());
+
+    // region Creative Tab Item register
+
+    public static final ResourceKey<CreativeModeTab> CUSTOM_CREATIVE_TAB_KEY = ResourceKey.create(
+            BuiltInRegistries.CREATIVE_MODE_TAB.key(), Identifier.fromNamespaceAndPath(MOD_ID, "creative_tab")
+    );
+
+    public static final CreativeModeTab CUSTOM_CREATIVE_TAB = FabricCreativeModeTab.builder()
+            .icon(() -> new ItemStack(ModItems.SOUL_TETHER))
+            .title(Component.translatable("creativeTab.soultether"))
+            .displayItems((params, output) -> {
+                // Items
+                output.accept(ModItems.SOUL_TETHER);
+                output.accept(ModItems.THUNDER_STICK);
+
+                // Blocks
+                // ...
+            })
+            .build();
+
+    // endregion Creative Tab Item register
+}
