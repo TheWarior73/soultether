@@ -19,7 +19,7 @@ import org.jspecify.annotations.NonNull;
 
 public class ThunderStickItem extends Item {
 
-    private int MAX_DISTANCE_FROM_PLAYER = 32;
+    public int MAX_DISTANCE_FROM_PLAYER = 32;
 
     public ThunderStickItem(Properties properties) {
         super(properties);
@@ -52,24 +52,10 @@ public class ThunderStickItem extends Item {
             strikePos = hitResult.getBlockPos();
         } else {
             // Fallback: calculate fixed horizontal position at MAX_DISTANCE_FROM_PLAYER
-            double dx = lookAngle.x;
-            double dz = lookAngle.z;
-            double len = Math.sqrt(dx * dx + dz * dz);
-            Vec3 horizontalLook;
-            if (len > 1e-5) {
-                horizontalLook = new Vec3(dx / len, 0.0, dz / len);
-            } else {
-                // If looking straight up or down, calculate horizontal vector from yaw
-                float yaw = player.getYRot();
-                float f = -yaw * ((float)Math.PI / 180F);
-                horizontalLook = new Vec3(Math.sin(f), 0.0, Math.cos(f));
-            }
+            Vec3 horizontalLook = getHorizontalLook(player, lookAngle);
             Vec3 fallbackPos = player.position().add(horizontalLook.scale(MAX_DISTANCE_FROM_PLAYER));
             strikePos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, BlockPos.containing(fallbackPos));
         }
-
-        SoulTether.LOGGER.info("Player Pos: {}", player.position());
-        SoulTether.LOGGER.info("New Strike Pos: {}", strikePos);
 
         LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, level);
         bolt.setPos(new Vec3(strikePos.getX() + 0.5, strikePos.getY(), strikePos.getZ() + 0.5));
@@ -78,11 +64,19 @@ public class ThunderStickItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    public int getMAX_DISTANCE_FROM_PLAYER() {
-        return MAX_DISTANCE_FROM_PLAYER;
-    }
-
-    public void setMAX_DISTANCE_FROM_PLAYER(int MAX_DISTANCE_FROM_PLAYER) {
-        this.MAX_DISTANCE_FROM_PLAYER = MAX_DISTANCE_FROM_PLAYER;
+    private static @NonNull Vec3 getHorizontalLook(@NonNull Player player, Vec3 lookAngle) {
+        double dx = lookAngle.x;
+        double dz = lookAngle.z;
+        double len = Math.sqrt(dx * dx + dz * dz);
+        Vec3 horizontalLook;
+        if (len > 1e-5) {
+            horizontalLook = new Vec3(dx / len, 0.0, dz / len);
+        } else {
+            // If looking straight up or down, calculate horizontal vector from yaw
+            float yaw = player.getYRot();
+            float f = -yaw * ((float)Math.PI / 180F);
+            horizontalLook = new Vec3(Math.sin(f), 0.0, Math.cos(f));
+        }
+        return horizontalLook;
     }
 }
