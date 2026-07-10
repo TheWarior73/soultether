@@ -10,29 +10,32 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin {
+import java.util.Objects;
+import java.util.Optional;
 
-    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
-    private void onDropAllDeathLoot(DamageSource damageSource, CallbackInfo ci) {
-        ServerPlayer player = (ServerPlayer) (Object) this;
+@Mixin(Player.class)
+public abstract class PlayerMixin {
+
+    @Inject(method = "dropEquipment", at = @At("HEAD"))
+    private void onDropEquipment(final ServerLevel level, CallbackInfo ci) {
+        Player player = (Player) (Object) this;
 
         // Skip if keepInventory is active
-        if (player.serverLevel().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+        if (level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             return;
         }
 
@@ -57,23 +60,23 @@ public abstract class ServerPlayerMixin {
             return;
         }
 
-        CompoundTag nbt = customData.copyNbt();
+        CompoundTag nbt = customData.copyTag();
         if (!nbt.contains("x") || !nbt.contains("y") || !nbt.contains("z") || !nbt.contains("dimension")) {
             return;
         }
 
-        int x = nbt.getInt("x");
-        int y = nbt.getInt("y");
-        int z = nbt.getInt("z");
-        BlockPos targetPos = new BlockPos(x, y, z);
-        String dimString = nbt.getString("dimension");
+        Optional<Integer> x = nbt.getInt("x");
+        Optional<Integer> y = nbt.getInt("y");
+        Optional<Integer> z = nbt.getInt("z");
+        BlockPos targetPos = new BlockPos(x.get(), y.get(), z.get());
+        String dimString = String.valueOf(nbt.getString("dimension"));
 
-        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Identifier.tryParse(dimString));
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Objects.requireNonNull(Identifier.tryParse(dimString)));
         if (dimKey == null) {
             return;
         }
 
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = level.getServer();
         if (server == null) {
             return;
         }
@@ -86,11 +89,10 @@ public abstract class ServerPlayerMixin {
         // Get or load the chunk at the target position to find the block entity
         targetLevel.getChunkAt(targetPos);
         BlockEntity blockEntity = targetLevel.getBlockEntity(targetPos);
-        if (!(blockEntity instanceof SoulChestBlockEntity)) {
+        if (!(blockEntity instanceof SoulChestBlockEntity soulChest)) {
             return;
         }
 
-        SoulChestBlockEntity soulChest = (SoulChestBlockEntity) blockEntity;
         SoulTetherItem tetherItem = (SoulTetherItem) tetherStack.getItem();
         com.thewarior73.soultether.config.ModConfig.TetherTier tier = tetherItem.getTier();
 
@@ -98,7 +100,7 @@ public abstract class ServerPlayerMixin {
         ResourceKey<Level> currentDim = player.level().dimension();
         int durabilityCost = 1;
         if (!currentDim.equals(dimKey)) {
-            durabilityCost = (int) Math.ceil(1.0 * tier.dimensionalCostMultiplier());
+            durabilityCost = (int) Math.ceil(tier.dimensionalCostMultiplier());
         }
 
         // Damage the tether stack
@@ -142,7 +144,10 @@ public abstract class ServerPlayerMixin {
         // If the tether broke, we play a break sound and remove it
         if (tetherBroke) {
             player.getInventory().setItem(tetherSlot, ItemStack.EMPTY);
-            player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+            player.playSound(
+                    SoundEvents.ITEM_BREAK.value(),
+                    1.0f,
+                    1.0f);
         }
 
         if (transferredAny) {
@@ -151,6 +156,7 @@ public abstract class ServerPlayerMixin {
         }
     }
 
+    @Unique
     private boolean insertIntoChest(SoulChestBlockEntity chest, ItemStack stack) {
         // Try to stack it first
         for (int i = 0; i < chest.getContainerSize(); i++) {
