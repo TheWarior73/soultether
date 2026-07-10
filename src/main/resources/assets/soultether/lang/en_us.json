@@ -1,6 +1,16 @@
 {
   "creativeTab.soultether": "Soul Tether",
 
-  "item.soultether.soul_tether": "Soul Tether",
-  "item.soultether.thunder_stick": "Thunder Stick"
+  "item.soultether.soul_tether": "Basic Soul Tether",
+  "item.soultether.soul_tether_iron": "Iron Soul Tether",
+  "item.soultether.soul_tether_gold": "Gold Soul Tether",
+  "item.soultether.soul_tether_diamond": "Diamond Soul Tether",
+  "item.soultether.thunder_stick": "Thunder Stick",
+
+  "block.soultether.soul_chest": "Soul Chest",
+
+  "item.soultether.soul_tether.linked": "Linked to chest at: %d, %d, %d",
+  "item.soultether.soul_tether.tooltip.linked_pos": "Linked to Chest: %d, %d, %d",
+  "item.soultether.soul_tether.tooltip.linked_dim": "Dimension: %s",
+  "item.soultether.soul_tether.tooltip.unlinked": "Unlinked (Right-click Soul Chest to link again)"
 }

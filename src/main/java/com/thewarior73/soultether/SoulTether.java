@@ -1,5 +1,6 @@
 package com.thewarior73.soultether;
 
+import com.thewarior73.soultether.Blocks.ModBlocks;
 import com.thewarior73.soultether.Items.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -22,8 +23,9 @@ public class SoulTether implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		ModBlocks.initialize();
 		ModItems.initialize();
-		LOGGER.info("Loaded Items Successfully!");
+		LOGGER.info("Initialization complete.");
 	}
 
 	public static Identifier id(String path) {

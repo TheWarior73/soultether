@@ -1,0 +1,180 @@
+package com.thewarior73.soultether.mixin;
+
+import com.thewarior73.soultether.Blocks.SoulChestBlockEntity;
+import com.thewarior73.soultether.Items.SoulTetherItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(ServerPlayer.class)
+public abstract class ServerPlayerMixin {
+
+    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
+    private void onDropAllDeathLoot(DamageSource damageSource, CallbackInfo ci) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+
+        // Skip if keepInventory is active
+        if (player.serverLevel().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            return;
+        }
+
+        // Search for a Soul Tether in inventory
+        ItemStack tetherStack = ItemStack.EMPTY;
+        int tetherSlot = -1;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.getItem() instanceof SoulTetherItem) {
+                tetherStack = stack;
+                tetherSlot = i;
+                break; // Use the first one found
+            }
+        }
+
+        if (tetherStack.isEmpty()) {
+            return;
+        }
+
+        CustomData customData = tetherStack.get(DataComponents.CUSTOM_DATA);
+        if (customData == null) {
+            return;
+        }
+
+        CompoundTag nbt = customData.copyNbt();
+        if (!nbt.contains("x") || !nbt.contains("y") || !nbt.contains("z") || !nbt.contains("dimension")) {
+            return;
+        }
+
+        int x = nbt.getInt("x");
+        int y = nbt.getInt("y");
+        int z = nbt.getInt("z");
+        BlockPos targetPos = new BlockPos(x, y, z);
+        String dimString = nbt.getString("dimension");
+
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Identifier.tryParse(dimString));
+        if (dimKey == null) {
+            return;
+        }
+
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return;
+        }
+
+        ServerLevel targetLevel = server.getLevel(dimKey);
+        if (targetLevel == null) {
+            return;
+        }
+
+        // Get or load the chunk at the target position to find the block entity
+        targetLevel.getChunkAt(targetPos);
+        BlockEntity blockEntity = targetLevel.getBlockEntity(targetPos);
+        if (!(blockEntity instanceof SoulChestBlockEntity)) {
+            return;
+        }
+
+        SoulChestBlockEntity soulChest = (SoulChestBlockEntity) blockEntity;
+        SoulTetherItem tetherItem = (SoulTetherItem) tetherStack.getItem();
+        com.thewarior73.soultether.config.ModConfig.TetherTier tier = tetherItem.getTier();
+
+        // Calculate durability penalty
+        ResourceKey<Level> currentDim = player.level().dimension();
+        int durabilityCost = 1;
+        if (!currentDim.equals(dimKey)) {
+            durabilityCost = (int) Math.ceil(1.0 * tier.dimensionalCostMultiplier());
+        }
+
+        // Damage the tether stack
+        int newDamage = tetherStack.getDamageValue() + durabilityCost;
+        boolean tetherBroke = false;
+        if (newDamage >= tetherStack.getMaxDamage()) {
+            tetherBroke = true;
+        } else {
+            tetherStack.setDamageValue(newDamage);
+        }
+
+        // Move player's inventory items to the Soul Chest
+        boolean transferredAny = false;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            // Do not apply loss rate or destroy the tether itself (or its slot)
+            if (i == tetherSlot) {
+                if (tetherBroke) {
+                    player.getInventory().setItem(i, ItemStack.EMPTY);
+                }
+                continue;
+            }
+
+            // Check loss rate (items that roll below lossRate drop at death spot)
+            if (tier.lossRate() > 0 && player.level().getRandom().nextDouble() < tier.lossRate()) {
+                continue; // Skip transferring, it remains in player inventory and drops normally
+            }
+
+            // Try to insert stack into Soul Chest
+            if (insertIntoChest(soulChest, stack)) {
+                // If successfully transferred, clear from player inventory
+                player.getInventory().setItem(i, ItemStack.EMPTY);
+                transferredAny = true;
+            }
+        }
+
+        // If the tether broke, we play a break sound and remove it
+        if (tetherBroke) {
+            player.getInventory().setItem(tetherSlot, ItemStack.EMPTY);
+            player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+
+        if (transferredAny) {
+            soulChest.setChanged();
+            targetLevel.playSound(null, targetPos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5f, 1.0f);
+        }
+    }
+
+    private boolean insertIntoChest(SoulChestBlockEntity chest, ItemStack stack) {
+        // Try to stack it first
+        for (int i = 0; i < chest.getContainerSize(); i++) {
+            ItemStack chestStack = chest.getItem(i);
+            if (!chestStack.isEmpty() && ItemStack.isSameItemSameComponents(chestStack, stack)) {
+                int maxCount = Math.min(chest.getMaxStackSize(), chestStack.getMaxStackSize());
+                int transferAmount = Math.min(stack.getCount(), maxCount - chestStack.getCount());
+                if (transferAmount > 0) {
+                    chestStack.grow(transferAmount);
+                    stack.shrink(transferAmount);
+                    if (stack.isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        // Then find an empty slot
+        for (int i = 0; i < chest.getContainerSize(); i++) {
+            if (chest.getItem(i).isEmpty()) {
+                chest.setItem(i, stack.copy());
+                stack.setCount(0);
+                return true;
+            }
+        }
+        return false;
+    }
+}

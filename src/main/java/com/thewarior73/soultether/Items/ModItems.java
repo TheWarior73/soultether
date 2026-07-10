@@ -1,11 +1,14 @@
 package com.thewarior73.soultether.Items;
 
+import com.thewarior73.soultether.config.ModConfig;
+import com.thewarior73.soultether.Blocks.ModBlocks;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,8 +34,35 @@ public class ModItems {
         return item;
     }
 
-    public static final Item SOUL_TETHER = register(ModItemIDs.SOUL_TETHER, SoulTetherItem::new, new Item.Properties());
-    public static final Item THUNDER_STICK = register(ModItemIDs.THUNDER_STICK, ThunderStickItem::new, new Item.Properties());
+    public static final Item SOUL_TETHER = register(
+            ModItemIDs.SOUL_TETHER,
+            p -> new SoulTetherItem(p, ModConfig.BASIC),
+            new Item.Properties().durability(ModConfig.BASIC.maxUses())
+    );
+    public static final Item SOUL_TETHER_IRON = register(
+            ModItemIDs.SOUL_TETHER_IRON,
+            p -> new SoulTetherItem(p, ModConfig.IRON),
+            new Item.Properties().durability(ModConfig.IRON.maxUses())
+    );
+    public static final Item SOUL_TETHER_GOLD = register(
+            ModItemIDs.SOUL_TETHER_GOLD,
+            p -> new SoulTetherItem(p, ModConfig.GOLD),
+            new Item.Properties().durability(ModConfig.GOLD.maxUses())
+    );
+    public static final Item SOUL_TETHER_DIAMOND = register(
+            ModItemIDs.SOUL_TETHER_DIAMOND,
+            p -> new SoulTetherItem(p, ModConfig.DIAMOND),
+            new Item.Properties().durability(ModConfig.DIAMOND.maxUses())
+    );
+    public static final Item SOUL_CHEST = register(
+            ModItemIDs.SOUL_CHEST,
+            p -> new BlockItem(ModBlocks.SOUL_CHEST, p),
+            new Item.Properties()
+    );
+    public static final Item THUNDER_STICK = register(
+            ModItemIDs.THUNDER_STICK,
+            ThunderStickItem::new, new Item.Properties()
+    );
 
     // region Creative Tab Item register
 
@@ -46,10 +76,13 @@ public class ModItems {
             .displayItems((params, output) -> {
                 // Items
                 output.accept(ModItems.SOUL_TETHER);
+                output.accept(ModItems.SOUL_TETHER_IRON);
+                output.accept(ModItems.SOUL_TETHER_GOLD);
+                output.accept(ModItems.SOUL_TETHER_DIAMOND);
                 output.accept(ModItems.THUNDER_STICK);
 
                 // Blocks
-                // ...
+                output.accept(ModItems.SOUL_CHEST);
             })
             .build();
 
