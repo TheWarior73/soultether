@@ -31,3 +31,10 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 > - Links to a tether and stores dead player's inventory
 > - "take only" - cannot put items in it, only retrieve
 > - Empties content on ground if player's inventory could not hold all the items
+
+## TODO
+- FIX SoulChestBlock & SoulChestBlockEntity not working
+- SoulTether.s Texture.s
+- SoulChest Texture
+- TEST SoulTether : chests link, item recovery on death, tiers, chest unlink
+- Better DEBUG Logs

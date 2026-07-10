@@ -1,5 +1,6 @@
 package com.thewarior73.soultether.Items;
 
+import com.thewarior73.soultether.SoulTether;
 import com.thewarior73.soultether.config.ModConfig;
 import com.thewarior73.soultether.Blocks.ModBlocks;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
@@ -24,12 +25,16 @@ public class ModItems {
         // region register_creative_tab
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CUSTOM_CREATIVE_TAB_KEY, CUSTOM_CREATIVE_TAB);
         // endregion register_creative_tab
+
+        SoulTether.LOGGER.debug("Initializing ModItems");
     }
 
     public static Item register(ResourceKey<Item> itemKey, Function<Item.Properties, Item> itemFactory, Item.Properties settings) {
         Item item = itemFactory.apply(settings.setId(itemKey));
 
         Registry.register(BuiltInRegistries.ITEM, itemKey, item);
+
+        SoulTether.LOGGER.debug("Registered Item: {}", itemKey);
 
         return item;
     }

@@ -11,18 +11,22 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Function;
 
 public class ModBlocks {
     public static void initialize() {
         // Loads the class at runtime
+        SoulTether.LOGGER.debug("Initializing ModBlocks");
     }
 
     // region register function definition
-    private static Block register(ResourceKey<Block> id, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties properties) {
+    private static Block register(ResourceKey<Block> id, @NonNull Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.@NonNull Properties properties) {
         // Create the block instance
         Block block = blockFactory.apply(properties.setId(id));
+
+        SoulTether.LOGGER.debug("Registering ModBlock: {}", id);
 
         return Registry.register(BuiltInRegistries.BLOCK, id, block);
     }
@@ -33,10 +37,14 @@ public class ModBlocks {
             Block... blocks
     ) {
         Identifier id = Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, name);
+
+        SoulTether.LOGGER.debug("Registering BlockEntityType: {}", id);
+
         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, FabricBlockEntityTypeBuilder.<T>create(entityFactory, blocks).build());
     }
     // endregion
 
+    // region soul chest
     public static final Block SOUL_CHEST = register(
             ModBlockIDs.SOUL_CHEST,
             Block::new,
@@ -49,4 +57,5 @@ public class ModBlocks {
     public static final BlockEntityType<SoulChestBlockEntity> SOUL_CHEST_ENTITY_TYPE = register(
             "soul_chest_entity", SoulChestBlockEntity::new, ModBlocks.SOUL_CHEST
     );
+    // endregion
 }

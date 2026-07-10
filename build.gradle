@@ -14,6 +14,8 @@ repositories {
 	// for more information about repositories.
 }
 
+loom.log4jConfigs.from "log4j-dev.xml"
+
 loom {
 	splitEnvironmentSourceSets()
 

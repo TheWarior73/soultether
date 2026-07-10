@@ -23,8 +23,6 @@ public class ThunderStickItem extends Item {
 
     public ThunderStickItem(Properties properties) {
         super(properties);
-
-        SoulTether.LOGGER.info("Thunder Stick Item Init");
     }
 
     @Override
