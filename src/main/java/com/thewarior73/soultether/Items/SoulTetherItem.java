@@ -1,6 +1,7 @@
 package com.thewarior73.soultether.Items;
 
 import com.thewarior73.soultether.Blocks.SoulChestBlock;
+import com.thewarior73.soultether.SoulTether;
 import com.thewarior73.soultether.config.ModConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
@@ -42,19 +44,27 @@ public class SoulTetherItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
-        if (level.getBlockState(pos).getBlock() instanceof SoulChestBlock) {
-            if (!level.isClientSide()) {
-                CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
-                    nbt.putInt("x", pos.getX());
-                    nbt.putInt("y", pos.getY());
-                    nbt.putInt("z", pos.getZ());
-                    nbt.putString("dimension", level.dimension().toString());
-                });
+        SoulTether.LOGGER.debug("Block: {}", level.getBlockState(pos).getBlock());
+        SoulTether.LOGGER.debug("Is instance of SoulChestBlock: {}", level.getBlockState(pos).getBlock() instanceof SoulChestBlock);
 
-                if (player != null) {
-                    player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.linked", pos.getX(), pos.getY(), pos.getZ()));
-                    level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
-                }
+        if (level.getBlockState(pos).getBlock() instanceof SoulChestBlock) {
+            if (level.isClientSide()) {
+                return InteractionResult.PASS;
+            }
+
+            CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
+                nbt.putInt("x", pos.getX());
+                nbt.putInt("y", pos.getY());
+                nbt.putInt("z", pos.getZ());
+                nbt.putString("dimension", level.dimension().location().toString());
+
+                SoulTether.LOGGER.debug(nbt.toString());
+            });
+
+            if (player != null) {
+                player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.linked", pos.getX(), pos.getY(), pos.getZ()));
+                SoulTether.LOGGER.debug("linked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
+                level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
             }
             return InteractionResult.SUCCESS;
         }

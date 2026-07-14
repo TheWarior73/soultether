@@ -47,7 +47,7 @@ public class ModBlocks {
     // region soul chest
     public static final Block SOUL_CHEST = register(
             ModBlockIDs.SOUL_CHEST,
-            Block::new,
+            SoulChestBlock::new,
             BlockBehaviour.Properties.of()
                     .setId(ModBlockIDs.SOUL_CHEST)
                     .strength(2.5F)
