@@ -39,6 +39,10 @@ public class SoulChestBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (player.getMainHandItem().getItem() instanceof SoulTetherItem || player.getOffhandItem().getItem() instanceof SoulTetherItem) {
+            return InteractionResult.PASS;
+        }
+
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }

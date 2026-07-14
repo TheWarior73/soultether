@@ -44,19 +44,19 @@ public class SoulTetherItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
-        SoulTether.LOGGER.debug("Block: {}", level.getBlockState(pos).getBlock());
-        SoulTether.LOGGER.debug("Is instance of SoulChestBlock: {}", level.getBlockState(pos).getBlock() instanceof SoulChestBlock);
-
         if (level.getBlockState(pos).getBlock() instanceof SoulChestBlock) {
             if (level.isClientSide()) {
-                return InteractionResult.PASS;
+                return InteractionResult.SUCCESS;
             }
+
+            SoulTether.LOGGER.debug("Block: {}", level.getBlockState(pos).getBlock());
+            SoulTether.LOGGER.debug("Is instance of SoulChestBlock: {}", level.getBlockState(pos).getBlock() instanceof SoulChestBlock);
 
             CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
                 nbt.putInt("x", pos.getX());
                 nbt.putInt("y", pos.getY());
                 nbt.putInt("z", pos.getZ());
-                nbt.putString("dimension", level.dimension().location().toString());
+                nbt.putString("dimension", level.dimension().identifier().toString());
 
                 SoulTether.LOGGER.debug(nbt.toString());
             });
