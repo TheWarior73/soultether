@@ -1,5 +1,6 @@
 package com.thewarior73.soultether.Blocks;
 
+import com.thewarior73.soultether.Items.SoulTetherItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.mojang.serialization.MapCodec;
 
@@ -38,7 +40,7 @@ public class SoulChestBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
         if (player.getMainHandItem().getItem() instanceof SoulTetherItem || player.getOffhandItem().getItem() instanceof SoulTetherItem) {
             return InteractionResult.PASS;
         }

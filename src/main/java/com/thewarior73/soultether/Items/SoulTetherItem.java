@@ -63,8 +63,8 @@ public class SoulTetherItem extends Item {
 
             if (player != null) {
                 player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.linked", pos.getX(), pos.getY(), pos.getZ()));
-                SoulTether.LOGGER.debug("linked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
                 level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
+                SoulTether.LOGGER.debug("linked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
             }
             return InteractionResult.SUCCESS;
         }

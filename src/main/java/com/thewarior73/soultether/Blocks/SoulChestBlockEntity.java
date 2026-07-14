@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
 public class SoulChestBlockEntity extends BlockEntity implements Container {
     private final NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
@@ -34,12 +35,12 @@ public class SoulChestBlockEntity extends BlockEntity implements Container {
     }
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NonNull ItemStack getItem(int slot) {
         return this.items.get(slot);
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount) {
+    public @NonNull ItemStack removeItem(int slot, int amount) {
         ItemStack result = ContainerHelper.removeItem(this.items, slot, amount);
         if (!result.isEmpty()) {
             this.setChanged();
@@ -48,12 +49,12 @@ public class SoulChestBlockEntity extends BlockEntity implements Container {
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {
+    public @NonNull ItemStack removeItemNoUpdate(int slot) {
         return ContainerHelper.takeItem(this.items, slot);
     }
 
     @Override
-    public void setItem(int slot, ItemStack stack) {
+    public void setItem(int slot, @NonNull ItemStack stack) {
         this.items.set(slot, stack);
         if (stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
@@ -62,7 +63,7 @@ public class SoulChestBlockEntity extends BlockEntity implements Container {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NonNull Player player) {
         return Container.stillValidBlockEntity(this, player);
     }
 
@@ -73,13 +74,13 @@ public class SoulChestBlockEntity extends BlockEntity implements Container {
     }
 
     @Override
-    protected void loadAdditional(final ValueInput input) {
+    protected void loadAdditional(final @NonNull ValueInput input) {
         super.loadAdditional(input);
         ContainerHelper.loadAllItems(input, this.items);
     }
 
     @Override
-    protected void saveAdditional(final ValueOutput output) {
+    protected void saveAdditional(final @NonNull ValueOutput output) {
         super.saveAdditional(output);
         ContainerHelper.saveAllItems(output, this.items);
     }
