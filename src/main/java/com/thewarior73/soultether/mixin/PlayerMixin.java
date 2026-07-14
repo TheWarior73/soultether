@@ -61,17 +61,24 @@ public abstract class PlayerMixin {
         }
 
         CompoundTag nbt = customData.copyTag();
-        if (!nbt.contains("x") || !nbt.contains("y") || !nbt.contains("z") || !nbt.contains("dimension")) {
+        Optional<Integer> xOpt = nbt.getInt("x");
+        Optional<Integer> yOpt = nbt.getInt("y");
+        Optional<Integer> zOpt = nbt.getInt("z");
+        Optional<String> dimOpt = nbt.getString("dimension");
+
+        if (xOpt.isEmpty() || yOpt.isEmpty() || zOpt.isEmpty() || dimOpt.isEmpty()) {
             return;
         }
 
-        Optional<Integer> x = nbt.getInt("x");
-        Optional<Integer> y = nbt.getInt("y");
-        Optional<Integer> z = nbt.getInt("z");
-        BlockPos targetPos = new BlockPos(x.get(), y.get(), z.get());
-        String dimString = String.valueOf(nbt.getString("dimension"));
+        BlockPos targetPos = new BlockPos(xOpt.get(), yOpt.get(), zOpt.get());
+        String dimString = dimOpt.get();
 
-        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Objects.requireNonNull(Identifier.tryParse(dimString)));
+        Identifier dimIdentifier = Identifier.tryParse(dimString);
+        if (dimIdentifier == null) {
+            return;
+        }
+
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, dimIdentifier);
         if (dimKey == null) {
             return;
         }
