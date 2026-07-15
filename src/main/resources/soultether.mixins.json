@@ -3,7 +3,6 @@
 	"package": "com.thewarior73.soultether.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"ExampleMixin",
 		"PlayerMixin"
 	],
 	"injectors": {
