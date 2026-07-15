@@ -33,8 +33,72 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 > - Empties content on ground if player's inventory could not hold all the items
 
 ## TODO
-- FIX SoulChestBlock & SoulChestBlockEntity not working
-- SoulTether.s Texture.s
+- SoulTether.s Texture.s (gold, diamond)
 - SoulChest Texture
-- TEST SoulTether : chests link, item recovery on death, tiers, chest unlink
 - Better DEBUG Logs
+- Send a message about dropped items depending on tier
+- SoulChest GUI
+- TEST: Dimensional Costs
+
+## TESTS
+
+- Soul Tether (BASIC)
+
+| ITEM                             | STATUS  | COMMENT                                |
+|----------------------------------|---------|----------------------------------------|
+| Link to chest                    | PASSED  |                                        |
+| Unlink from chest                | FAILED  | FIXME                                  |
+| Link to new chest                | PASSED  |                                        |
+| consume durability on death      | PASSED  | Consumes the item (1 durability total) |
+| Drop item on death               | N/A     | Should be 15% of inventory             |
+| Dimentional cost drop multiplier | N/A     | Should be x2.5                         |
+
+- Soul Tether (IRON)
+
+| ITEM                              | STATUS  | COMMENT                    |
+|-----------------------------------|---------|----------------------------|
+| Link to chest                     | PASSED  |                            |
+| Unlink from chest                 | FAILED  |                            |
+| Link to new chest                 | PASSED  |                            |
+| consume durability on death       | UNSURE  |                            |
+| Drop item on death                | N/A     | Should be 10% of inventory |
+| Dimentional cost drop multiplier  | N/A     | Should be x1.75            |
+
+- Soul Tether (GOLD)
+
+| ITEM                             | STATUS  | COMMENT                   |
+|----------------------------------|---------|---------------------------|
+| Link to chest                    | N/A     |                           |
+| Unlink from chest                | N/A     |                           |
+| Link to new chest                | N/A     |                           |
+| consume durability on death      | N/A     |                           |
+| Drop item on death               | N/A     | Should be 0% of inventory |
+| Dimentional cost drop multiplier | N/A     | Should be x1.25           |
+
+- Soul Tether (DIAMOND)
+
+| ITEM                             | STATUS  | COMMENT                   |
+|----------------------------------|---------|---------------------------|
+| Link to chest                    | N/A     |                           |
+| Unlink from chest                | N/A     |                           |
+| Link to new chest                | N/A     |                           |
+| consume durability on death      | N/A     |                           |
+| Drop item on death               | N/A     | Should be 0% of inventory |
+| Dimentional cost drop multiplier | N/A     | Should be x1              |
+
+- Soul Chest
+
+| ITEM                                                               | STATUS  | COMMENT                   |
+|--------------------------------------------------------------------|---------|---------------------------|
+| Store inventory on death                                           | N/A     |                           |
+| Cannot put stuff inside                                            | N/A     |                           |
+| Drops content on ground if player inventory cannot hold everything | N/A     |                           |
+
+- Soul Chest (Secure)
+
+| ITEM                                                               | STATUS  | COMMENT                   |
+|--------------------------------------------------------------------|---------|---------------------------|
+| Can only be accessed by owning player                              | N/A     |                           |
+| Store inventory on death                                           | N/A     |                           |
+| Cannot put stuff inside                                            | N/A     |                           |
+| Drops content on ground if player inventory cannot hold everything | N/A     |                           |
