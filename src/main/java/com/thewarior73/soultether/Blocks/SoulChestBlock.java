@@ -25,17 +25,17 @@ public class SoulChestBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new SoulChestBlockEntity(pos, state);
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    protected @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -56,15 +56,12 @@ public class SoulChestBlock extends BaseEntityBlock {
                 ItemStack stack = soulChest.getItem(i);
                 if (!stack.isEmpty()) {
                     // Try to insert into player's inventory
-                    if (player.getInventory().add(stack)) {
-                        soulChest.setItem(i, ItemStack.EMPTY);
-                        transferredAny = true;
-                    } else {
+                    if (!player.getInventory().add(stack)) {
                         // Inventory is full, drop on the ground
                         player.drop(stack, false);
-                        soulChest.setItem(i, ItemStack.EMPTY);
-                        transferredAny = true;
                     }
+                    soulChest.setItem(i, ItemStack.EMPTY);
+                    transferredAny = true;
                 }
             }
 
