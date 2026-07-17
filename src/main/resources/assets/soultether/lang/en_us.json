@@ -8,9 +8,9 @@
   "item.soultether.thunder_stick": "Thunder Stick",
 
   "block.soultether.soul_chest": "Soul Chest",
+  "item.soultether.soul_chest": "Soul Chest",
 
-  "item.soultether.soul_tether.linked": "Linked to chest at: %d, %d, %d",
   "item.soultether.soul_tether.tooltip.linked_pos": "Linked to Chest: %d, %d, %d",
   "item.soultether.soul_tether.tooltip.linked_dim": "Dimension: %s",
-  "item.soultether.soul_tether.tooltip.unlinked": "Unlinked (Right-click Soul Chest to link again)"
+  "item.soultether.soul_tether.tooltip.unlinked_pos": "Unlinked (Right-click Soul Chest to link again)"
 }

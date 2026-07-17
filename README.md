@@ -38,7 +38,7 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 - Better DEBUG Logs
 - Send a message about dropped items depending on tier
 - SoulChest GUI
-- TEST: Dimensional Costs
+- TESTS
 
 ## TESTS
 

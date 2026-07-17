@@ -10,6 +10,6 @@ public class ModConfig {
 
     public static final TetherTier BASIC = new TetherTier(1, 0.15, 3.0);
     public static final TetherTier IRON = new TetherTier(10, 0.10, 2.0);
-    public static final TetherTier GOLD = new TetherTier(5, 0.0, 1.5);
+    public static final TetherTier GOLD = new TetherTier(5, 0.0, 1.0);
     public static final TetherTier DIAMOND = new TetherTier(25, 0.0, 1.0);
 }
