@@ -32,12 +32,15 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 > - "take only" - cannot put items in it, only retrieve
 > - Empties content on ground if player's inventory could not hold all the items
 
+## Known
+
+- Linking to a chest, breaking it and placing another one keeps the link alive
+
 ## TODO
-- SoulTether.s Texture.s (gold, diamond)
-- SoulChest Texture
+- SoulChest Orientation & Correct Block Rendering + Opened State
+- SoulChest GUI
 - Better DEBUG Logs
 - Send a message about dropped items depending on tier
-- SoulChest GUI
 - TESTS
 
 ## TESTS
@@ -73,7 +76,7 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 | Link to new chest                | N/A     |                           |
 | consume durability on death      | N/A     |                           |
 | Drop item on death               | N/A     | Should be 0% of inventory |
-| Dimentional cost drop multiplier | N/A     | Should be x1.25           |
+| Dimentional cost drop multiplier | N/A     | Should be x1.25, equiv x1 |
 
 - Soul Tether (DIAMOND)
 
@@ -88,11 +91,11 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 
 - Soul Chest
 
-| ITEM                                                               | STATUS  | COMMENT                   |
-|--------------------------------------------------------------------|---------|---------------------------|
-| Store inventory on death                                           | N/A     |                           |
-| Cannot put stuff inside                                            | N/A     |                           |
-| Drops content on ground if player inventory cannot hold everything | N/A     |                           |
+| ITEM                                                               | STATUS | COMMENT                   |
+|--------------------------------------------------------------------|--------|---------------------------|
+| Store inventory on death                                           | N/A    |                           |
+| Cannot put stuff inside                                            | N/A    |                           |
+| Drops content on ground if player inventory cannot hold everything | N/A    |                           |
 
 - Soul Chest (Secure)
 
