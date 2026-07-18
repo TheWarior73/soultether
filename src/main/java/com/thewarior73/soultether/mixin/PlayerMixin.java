@@ -119,7 +119,7 @@ public abstract class PlayerMixin {
             tetherStack.setDamageValue(newDamage);
         }
 
-        // Move player's inventory items to the Soul Chest
+        // Move player's inventory items to the Soul Chest slot-to-slot
         boolean transferredAny = false;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
@@ -140,12 +140,10 @@ public abstract class PlayerMixin {
                 continue; // Skip transferring, it remains in player inventory and drops normally
             }
 
-            // Try to insert stack into Soul Chest
-            if (insertIntoChest(soulChest, stack)) {
-                // If successfully transferred, clear from player inventory
-                player.getInventory().setItem(i, ItemStack.EMPTY);
-                transferredAny = true;
-            }
+            // Copy to exact same slot in Soul Chest
+            soulChest.setItem(i, stack.copy());
+            player.getInventory().setItem(i, ItemStack.EMPTY);
+            transferredAny = true;
         }
 
         // If the tether broke, we play a break sound and remove it
@@ -161,33 +159,5 @@ public abstract class PlayerMixin {
             soulChest.setChanged();
             targetLevel.playSound(null, targetPos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5f, 1.0f);
         }
-    }
-
-    @Unique
-    private boolean insertIntoChest(SoulChestBlockEntity chest, ItemStack stack) {
-        // Try to stack it first
-        for (int i = 0; i < chest.getContainerSize(); i++) {
-            ItemStack chestStack = chest.getItem(i);
-            if (!chestStack.isEmpty() && ItemStack.isSameItemSameComponents(chestStack, stack)) {
-                int maxCount = Math.min(chest.getMaxStackSize(), chestStack.getMaxStackSize());
-                int transferAmount = Math.min(stack.getCount(), maxCount - chestStack.getCount());
-                if (transferAmount > 0) {
-                    chestStack.grow(transferAmount);
-                    stack.shrink(transferAmount);
-                    if (stack.isEmpty()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        // Then find an empty slot
-        for (int i = 0; i < chest.getContainerSize(); i++) {
-            if (chest.getItem(i).isEmpty()) {
-                chest.setItem(i, stack.copy());
-                stack.setCount(0);
-                return true;
-            }
-        }
-        return false;
     }
 }

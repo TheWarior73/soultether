@@ -26,6 +26,7 @@ public class SoulTether implements ModInitializer {
 
 		ModBlocks.initialize();
 		ModItems.initialize();
+		com.thewarior73.soultether.Blocks.ModMenuTypes.initialize();
 		LOGGER.debug("SoulTether has been initialized Correctly");
 	}
 

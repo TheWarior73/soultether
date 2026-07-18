@@ -2,17 +2,22 @@ package com.thewarior73.soultether.Blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-public class SoulChestBlockEntity extends BlockEntity implements Container {
+public class SoulChestBlockEntity extends BlockEntity implements Container, MenuProvider {
     private final NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
 
     public SoulChestBlockEntity(BlockPos pos, BlockState state) {
@@ -83,5 +88,15 @@ public class SoulChestBlockEntity extends BlockEntity implements Container {
     protected void saveAdditional(final @NonNull ValueOutput output) {
         super.saveAdditional(output);
         ContainerHelper.saveAllItems(output, this.items);
+    }
+
+    @Override
+    public @NonNull Component getDisplayName() {
+        return Component.translatable("container.soul_chest");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int containerId, @NonNull Inventory playerInventory, @NonNull Player player) {
+        return new SoulChestMenu(containerId, playerInventory, this);
     }
 }

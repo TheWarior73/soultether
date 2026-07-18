@@ -52,6 +52,7 @@ public class ModBlocks {
                     .setId(ModBlockIDs.SOUL_CHEST)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)
+                    .noOcclusion()
     );
 
     public static final BlockEntityType<SoulChestBlockEntity> SOUL_CHEST_ENTITY_TYPE = register(
