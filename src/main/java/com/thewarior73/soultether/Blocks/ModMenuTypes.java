@@ -11,7 +11,7 @@ public class ModMenuTypes {
     public static final MenuType<SoulChestMenu> SOUL_CHEST_MENU_TYPE = Registry.register(
             BuiltInRegistries.MENU,
             Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, "soul_chest"),
-            new MenuType<>(SoulChestMenu::new, FeatureFlags.VANILLA_FEATURES)
+            new MenuType<>(SoulChestMenu::new, FeatureFlags.VANILLA_SET)
     );
 
     public static void initialize() {
