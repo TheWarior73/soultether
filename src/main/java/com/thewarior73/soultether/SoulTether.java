@@ -1,6 +1,7 @@
 package com.thewarior73.soultether;
 
 import com.thewarior73.soultether.Blocks.ModBlocks;
+import com.thewarior73.soultether.Blocks.ModMenuTypes;
 import com.thewarior73.soultether.Items.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -26,7 +27,7 @@ public class SoulTether implements ModInitializer {
 
 		ModBlocks.initialize();
 		ModItems.initialize();
-		com.thewarior73.soultether.Blocks.ModMenuTypes.initialize();
+		ModMenuTypes.initialize();
 		LOGGER.debug("SoulTether has been initialized Correctly");
 	}
 
