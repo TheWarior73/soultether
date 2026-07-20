@@ -92,7 +92,7 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
 
     @Override
     public @NonNull Component getDisplayName() {
-        return Component.translatable("container.soul_chest");
+        return Component.translatable("container.soultether.soul_chest");
     }
 
     @Override
