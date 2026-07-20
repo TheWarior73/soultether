@@ -2,6 +2,8 @@ package com.thewarior73.soultether.mixin;
 
 import com.thewarior73.soultether.Blocks.SoulChestBlockEntity;
 import com.thewarior73.soultether.Items.SoulTetherItem;
+import com.thewarior73.soultether.SoulTether;
+import com.thewarior73.soultether.TetherLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -19,12 +21,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(Player.class)
@@ -46,12 +46,18 @@ public abstract class PlayerMixin {
             ItemStack stack = player.getInventory().getItem(i);
             if (stack.getItem() instanceof SoulTetherItem) {
                 tetherStack = stack;
-                tetherSlot = i;
-                break; // Use the first one found
+
+                SoulTether.LOGGER.debug("SOUL TETHER ITEM FOUND, Stack Id: {}, Is linked ? ({})", i, SoulTetherItem.isLinked(tetherStack));
+
+                if (SoulTetherItem.isLinked(tetherStack)) {
+                    tetherSlot = i;
+                    break; // Use the first linked tether found
+                }
             }
         }
 
-        if (tetherStack.isEmpty()) {
+        // If no valid tether item found, skip
+        if (tetherSlot == -1) {
             return;
         }
 
@@ -61,17 +67,21 @@ public abstract class PlayerMixin {
         }
 
         CompoundTag nbt = customData.copyTag();
-        Optional<Integer> xOpt = nbt.getInt("x");
-        Optional<Integer> yOpt = nbt.getInt("y");
-        Optional<Integer> zOpt = nbt.getInt("z");
-        Optional<String> dimOpt = nbt.getString("dimension");
 
-        if (xOpt.isEmpty() || yOpt.isEmpty() || zOpt.isEmpty() || dimOpt.isEmpty()) {
+        if (!TetherLocation.hasLocationData(nbt)) {
             return;
         }
 
-        BlockPos targetPos = new BlockPos(xOpt.get(), yOpt.get(), zOpt.get());
-        String dimString = dimOpt.get();
+        Optional<TetherLocation> optLocation = TetherLocation.readNbtData(nbt);
+
+        SoulTether.LOGGER.debug(optLocation.toString());
+
+        if (optLocation.isEmpty()) {
+            return;
+        }
+
+        BlockPos targetPos = optLocation.get().pos();
+        String dimString = optLocation.get().dimension();
 
         Identifier dimIdentifier = Identifier.tryParse(dimString);
         if (dimIdentifier == null) {

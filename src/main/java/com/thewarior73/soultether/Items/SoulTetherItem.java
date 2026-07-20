@@ -2,7 +2,9 @@ package com.thewarior73.soultether.Items;
 
 import com.thewarior73.soultether.Blocks.SoulChestBlock;
 import com.thewarior73.soultether.SoulTether;
+import com.thewarior73.soultether.TetherLocation;
 import com.thewarior73.soultether.config.ModConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -31,6 +33,16 @@ public class SoulTetherItem extends Item {
         return this.tier;
     }
 
+    public static boolean isLinked(ItemStack stack) {
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null) {
+            CompoundTag nbt = customData.copyTag();
+
+            return TetherLocation.hasLocationData(nbt);
+        }
+        return false;
+    }
+
     @Override
     public @NonNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -47,18 +59,14 @@ public class SoulTetherItem extends Item {
             boolean isLinkedToThisChest = false;
             if (customData != null) {
                 CompoundTag nbt = customData.copyTag();
-                Optional<Integer> xOpt = nbt.getInt("x");
-                Optional<Integer> yOpt = nbt.getInt("y");
-                Optional<Integer> zOpt = nbt.getInt("z");
-                Optional<String> dimOpt = nbt.getString("dimension");
 
-                if (xOpt.isPresent() && yOpt.isPresent() && zOpt.isPresent() && dimOpt.isPresent()) {
-                    int x = xOpt.get();
-                    int y = yOpt.get();
-                    int z = zOpt.get();
-                    String dimension = dimOpt.get();
+                Optional<TetherLocation> optLocation = TetherLocation.readNbtData(nbt);
 
-                    if (x == pos.getX() && y == pos.getY() && z == pos.getZ() && dimension.equals(level.dimension().identifier().toString())) {
+                if (TetherLocation.hasLocationData(nbt) &&  optLocation.isPresent()) {
+                    BlockPos targetPos = optLocation.get().pos();
+                    String dimString = optLocation.get().dimension();
+
+                    if (targetPos.equals(pos) && dimString.equals(level.dimension().identifier().toString())) {
                         isLinkedToThisChest = true;
                     }
                 }

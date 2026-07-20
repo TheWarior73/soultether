@@ -42,6 +42,8 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 - Better DEBUG Logs
 - Send a message about dropped items depending on tier
 - TESTS
+- Item Breaking Noise on last use
+- Keep item with inventory on death ? (remove item loss chance)
 
 ## TESTS
 
