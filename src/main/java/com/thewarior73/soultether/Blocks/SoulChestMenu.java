@@ -13,6 +13,10 @@ import net.minecraft.world.item.ItemStack;
 public class SoulChestMenu extends AbstractContainerMenu {
     private final Container container;
 
+    public Container getContainer() {
+        return this.container;
+    }
+
     // Client-side constructor
     public SoulChestMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, new SimpleContainer(54));
