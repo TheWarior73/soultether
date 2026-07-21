@@ -32,18 +32,19 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 > - "take only" - cannot put items in it, only retrieve
 > - Empties content on ground if player's inventory could not hold all the items
 
-## Known
+## Known Stuff
 
-- Linking to a chest, breaking it and placing another one keeps the link alive
+- Linking to a chest, breaking it and placing another one keeps the link alive - WONTFIX ?
 
 ## TODO
-- SoulChest Orientation & Correct Block Rendering + Opened State
-- SoulChest GUI
-- Better DEBUG Logs
+- SoulTether enchant glint when linked
+- SoulChest Opened State
+- FIX SoulChest GUI
 - Send a message about dropped items depending on tier
-- TESTS
-- Item Breaking Noise on last use
 - Keep item with inventory on death ? (remove item loss chance)
+- Item Breaking Noise on last use
+- Better DEBUG Logs
+- TESTS
 
 ## TESTS
 

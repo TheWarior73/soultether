@@ -1,19 +1,19 @@
 {
   "variants": {
     "facing=north": {
+      "model": "soultether:block/soul_chest"
+    },
+    "facing=south": {
       "model": "soultether:block/soul_chest",
       "y": 180
     },
-    "facing=south": {
-      "model": "soultether:block/soul_chest"
-    },
     "facing=west": {
       "model": "soultether:block/soul_chest",
-      "y": 90
+      "y": 270
     },
     "facing=east": {
       "model": "soultether:block/soul_chest",
-      "y": 270
+      "y": 90
     }
   }
 }
