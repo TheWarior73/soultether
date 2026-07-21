@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,open=false": {
       "model": "soultether:block/soul_chest"
     },
-    "facing=south": {
+    "facing=north,open=true": {
+      "model": "soultether:block/soul_chest_open"
+    },
+    "facing=south,open=false": {
       "model": "soultether:block/soul_chest",
       "y": 180
     },
-    "facing=west": {
+    "facing=south,open=true": {
+      "model": "soultether:block/soul_chest_open",
+      "y": 180
+    },
+    "facing=west,open=false": {
       "model": "soultether:block/soul_chest",
       "y": 270
     },
-    "facing=east": {
+    "facing=west,open=true": {
+      "model": "soultether:block/soul_chest_open",
+      "y": 270
+    },
+    "facing=east,open=false": {
       "model": "soultether:block/soul_chest",
+      "y": 90
+    },
+    "facing=east,open=true": {
+      "model": "soultether:block/soul_chest_open",
       "y": 90
     }
   }
