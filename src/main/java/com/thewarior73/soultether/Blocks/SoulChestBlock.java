@@ -49,7 +49,7 @@ public class SoulChestBlock extends BaseEntityBlock {
 
     @Override
     protected @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
-        return RenderShape.MODEL;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
