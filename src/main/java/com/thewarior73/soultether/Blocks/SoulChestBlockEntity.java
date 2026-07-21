@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -30,7 +31,7 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
     
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         @Override
-        protected void onOpen(Level level, BlockPos pos, BlockState blockState) {
+        protected void onOpen(Level level, BlockPos pos, @NonNull BlockState blockState) {
             level.playSound(
                 null,
                 pos.getX() + 0.5,
@@ -39,12 +40,12 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
                 SoundEvents.CHEST_OPEN,
                 SoundSource.BLOCKS,
                 0.5F,
-                level.random.nextFloat() * 0.1F + 0.9F
+                level.getRandom().nextFloat() * 0.1F + 0.9F
             );
         }
 
         @Override
-        protected void onClose(Level level, BlockPos pos, BlockState blockState) {
+        protected void onClose(Level level, BlockPos pos, @NonNull BlockState blockState) {
             level.playSound(
                 null,
                 pos.getX() + 0.5,
@@ -53,18 +54,18 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
                 SoundEvents.CHEST_CLOSE,
                 SoundSource.BLOCKS,
                 0.5F,
-                level.random.nextFloat() * 0.1F + 0.9F
+                level.getRandom().nextFloat() * 0.1F + 0.9F
             );
         }
 
         @Override
-        protected void openerCountChanged(Level level, BlockPos pos, BlockState blockState, int previous, int current) {
+        protected void openerCountChanged(Level level, @NonNull BlockPos pos, BlockState blockState, int previous, int current) {
             Block block = blockState.getBlock();
             level.blockEvent(pos, block, 1, current);
         }
 
         @Override
-        protected boolean isOwnContainer(Player player) {
+        public boolean isOwnContainer(Player player) {
             if (player.containerMenu instanceof SoulChestMenu menu) {
                 return menu.getContainer() == SoulChestBlockEntity.this;
             }
@@ -153,16 +154,25 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
     }
 
     @Override
-    public void startOpen(@NonNull Player player) {
-        if (this.level != null && !player.isSpectator()) {
-            this.openersCounter.incrementOpeners(player, this.level, this.getBlockPos(), this.getBlockState(), 4.0D);
+    public void startOpen(@NonNull ContainerUser containerUser) {
+        if (!this.remove && !containerUser.getLivingEntity().isSpectator()) {
+            assert this.getLevel() != null;
+            this.openersCounter.incrementOpeners(
+                    containerUser.getLivingEntity(),
+                    this.getLevel(), this.getBlockPos(),
+                    this.getBlockState(),
+                    containerUser.getContainerInteractionRange()
+            );
         }
     }
 
     @Override
-    public void stopOpen(@NonNull Player player) {
-        if (this.level != null && !player.isSpectator()) {
-            this.openersCounter.decrementOpeners(player, this.level, this.getBlockPos(), this.getBlockState());
+    public void stopOpen(@NonNull ContainerUser containerUser) {
+        if (!this.remove && !containerUser.getLivingEntity().isSpectator()) {
+            assert this.getLevel() != null;
+            this.openersCounter.decrementOpeners(
+                    containerUser.getLivingEntity(), this.getLevel(), this.getBlockPos(), this.getBlockState()
+            );
         }
     }
 
@@ -187,7 +197,8 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
     }
 
     @Override
-    public float getOpenness(float tickDelta) {
+    public float getOpenNess(float tickDelta) {
         return this.chestLidController.getOpenness(tickDelta);
     }
+
 }

@@ -49,7 +49,7 @@ public class SoulChestBlock extends BaseEntityBlock {
 
     @Override
     protected @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class SoulChestBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? createTickerHelper(blockEntityType, ModBlocks.SOUL_CHEST_ENTITY_TYPE, SoulChestBlockEntity::lidAnimateTick) : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> blockEntityType) {
+        return level.isClientSide() ? createTickerHelper(blockEntityType, ModBlocks.SOUL_CHEST_ENTITY_TYPE, SoulChestBlockEntity::lidAnimateTick) : null;
     }
 }
