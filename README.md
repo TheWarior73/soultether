@@ -16,6 +16,8 @@ src/main/resources contains all the ressources. relative paths from there are :
 
 Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `items` does
 
+AABB - Axis Aligned Bounding Box
+
 ## Idea.s
 
 > Soul tether item
@@ -38,7 +40,6 @@ Notice that `models/item` and `texture/item` do not pluralize 'item' whereas `it
 
 ## TODO
 - SoulTether enchant glint when linked
-- SoulChest Opened State
 - FIX SoulChest GUI
 - Send a message about dropped items depending on tier
 - Keep item with inventory on death ? (remove item loss chance)

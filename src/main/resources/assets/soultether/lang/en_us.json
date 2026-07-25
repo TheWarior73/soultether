@@ -13,5 +13,7 @@
 
   "item.soultether.soul_tether.tooltip.linked_pos": "Linked to Chest: %d, %d, %d",
   "item.soultether.soul_tether.tooltip.linked_dim": "Dimension: %s",
-  "item.soultether.soul_tether.tooltip.unlinked_pos": "Unlinked (Right-click Soul Chest to link again)"
+  "item.soultether.soul_tether.tooltip.unlinked_pos": "Unlinked (Right-click Soul Chest to link again)",
+
+  "subtitle.soultether.soul_tether.break": "Soul Tether Breaks"
 }

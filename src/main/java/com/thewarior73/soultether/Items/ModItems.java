@@ -26,7 +26,7 @@ public class ModItems {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CUSTOM_CREATIVE_TAB_KEY, CUSTOM_CREATIVE_TAB);
         // endregion register_creative_tab
 
-        SoulTether.LOGGER.debug("Initializing ModItems");
+        SoulTether.LOGGER.debug("ModItems Initialized");
     }
 
     public static Item register(ResourceKey<Item> itemKey, Function<Item.Properties, Item> itemFactory, Item.Properties settings) {

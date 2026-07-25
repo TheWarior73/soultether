@@ -23,12 +23,18 @@ public class SoulTether implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		LOGGER.debug("\n==================================================\nDEBUG Logging Enabled.\n==================================================\n");
+		LOGGER.debug("\n==================================================\nDEBUG Logging Enabled.\n==================================================");
 
+		LOGGER.debug("Initializing Blocks");
 		ModBlocks.initialize();
+
+		LOGGER.debug("Initializing Items");
 		ModItems.initialize();
+
+		LOGGER.debug("Initializing Menu");
 		ModMenuTypes.initialize();
-		LOGGER.debug("SoulTether has been initialized Correctly");
+
+		LOGGER.info("SoulTether has finished initializing");
 	}
 
 	public static Identifier id(String path) {

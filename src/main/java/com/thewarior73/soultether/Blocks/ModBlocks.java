@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class ModBlocks {
     public static void initialize() {
         // Loads the class at runtime
-        SoulTether.LOGGER.debug("Initializing ModBlocks");
+        SoulTether.LOGGER.debug("ModBlocks Initialized");
     }
 
     // region register function definition

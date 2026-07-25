@@ -1,0 +1,6 @@
+{
+  "tether_breaks": {
+    "subtitle": "subtitle.soultether.soul_tether.break",
+    "sounds": ["minecraft:random/break"]
+  }
+}

@@ -8,13 +8,13 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModMenuTypes {
+    public static void initialize() {
+        SoulTether.LOGGER.debug("ModMenuTypes initialized");
+    }
+
     public static final MenuType<SoulChestMenu> SOUL_CHEST_MENU_TYPE = Registry.register(
             BuiltInRegistries.MENU,
             Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, "soul_chest"),
             new MenuType<>(SoulChestMenu::new, FeatureFlags.VANILLA_SET)
     );
-
-    public static void initialize() {
-        SoulTether.LOGGER.debug("Initializing ModMenuTypes");
-    }
 }

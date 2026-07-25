@@ -5,15 +5,20 @@ import com.thewarior73.soultether.Items.SoulTetherItem;
 import com.thewarior73.soultether.SoulTether;
 import com.thewarior73.soultether.TetherLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -21,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,6 +36,14 @@ import java.util.Optional;
 @Mixin(Player.class)
 public abstract class PlayerMixin {
 
+    @Unique
+    private static Identifier TetherBreakID = Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, "tether_breaks");
+    @Unique
+    private static final Holder.Reference<SoundEvent> TETHER_BREAK = Registry.registerForHolder(
+            BuiltInRegistries.SOUND_EVENT,
+            TetherBreakID,
+            SoundEvent.createVariableRangeEvent(TetherBreakID)
+    );
     @Inject(method = "dropEquipment", at = @At("HEAD"))
     private void onDropEquipment(final ServerLevel level, CallbackInfo ci) {
         Player player = (Player) (Object) this;
@@ -125,6 +139,8 @@ public abstract class PlayerMixin {
         boolean tetherBroke = false;
         if (newDamage >= tetherStack.getMaxDamage()) {
             tetherBroke = true;
+            targetLevel.playSound(null, BlockPos.containing(player.position()), TETHER_BREAK.value(), SoundSource.PLAYERS, 0.5f, 1.0f);
+            SoulTether.LOGGER.debug("Tether Item Broke !");
         } else {
             tetherStack.setDamageValue(newDamage);
         }
