@@ -36,7 +36,7 @@ public class ModBlocks {
             FabricBlockEntityTypeBuilder.Factory<? extends T> entityFactory,
             Block... blocks
     ) {
-        Identifier id = Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, name);
+        Identifier id = SoulTether.id(name);
 
         SoulTether.LOGGER.debug("Registering BlockEntityType: {}", id);
 

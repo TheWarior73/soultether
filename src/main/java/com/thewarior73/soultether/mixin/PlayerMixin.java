@@ -37,7 +37,7 @@ import java.util.Optional;
 public abstract class PlayerMixin {
 
     @Unique
-    private static Identifier TetherBreakID = Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, "tether_breaks");
+    private static Identifier TetherBreakID = SoulTether.id("tether_breaks");
     @Unique
     private static final Holder.Reference<SoundEvent> TETHER_BREAK = Registry.registerForHolder(
             BuiltInRegistries.SOUND_EVENT,

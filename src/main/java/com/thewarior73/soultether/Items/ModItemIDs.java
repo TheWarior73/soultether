@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 
 public class ModItemIDs {
     public static ResourceKey<Item> create(String name) {
-        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, name));
+        return ResourceKey.create(Registries.ITEM, SoulTether.id(name));
     }
 
     public static final ResourceKey<Item> SOUL_TETHER = create("soul_tether");

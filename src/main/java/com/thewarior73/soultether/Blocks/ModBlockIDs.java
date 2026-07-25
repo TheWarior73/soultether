@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 public class ModBlockIDs {
 
     public static ResourceKey<Block> createBlock(String name) {
-        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, name));
+        return ResourceKey.create(Registries.BLOCK, SoulTether.id(name));
     }
 
     public static ResourceKey<BlockEntityType<?>> createBlockEntity(String name) {
-        return ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(SoulTether.MOD_ID, name));
+        return ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, SoulTether.id(name));
     }
 
     public static final ResourceKey<Block> SOUL_CHEST = createBlock("soul_chest");
