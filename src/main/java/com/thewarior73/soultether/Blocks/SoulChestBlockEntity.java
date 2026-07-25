@@ -1,6 +1,7 @@
 package com.thewarior73.soultether.Blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public class SoulChestBlockEntity extends BlockEntity implements Container, MenuProvider, LidBlockEntity {
+public class SoulChestBlockEntity extends BlockEntity implements Container, MenuProvider, LidBlockEntity, WorldlyContainer {
+    private static final int[] SLOTS = java.util.stream.IntStream.range(0, 54).toArray();
     private final NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
     private final ChestLidController chestLidController = new ChestLidController();
     
@@ -201,4 +204,24 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
         return this.chestLidController.getOpenness(tickDelta);
     }
 
+    // WorldlyContainer implementation to disable Hopper/automation insertion while allowing extraction
+    @Override
+    public int @NonNull [] getSlotsForFace(@NonNull Direction direction) {
+        return SLOTS;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, @NonNull ItemStack itemStack, @Nullable Direction direction) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, @NonNull ItemStack itemStack, @NonNull Direction direction) {
+        return true;
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, @NonNull ItemStack itemStack) {
+        return false;
+    }
 }

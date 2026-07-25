@@ -145,6 +145,10 @@ public abstract class PlayerMixin {
             tetherStack.setDamageValue(newDamage);
         }
 
+        // Drop existing items in the Soul Chest onto the ground at targetPos before transferring
+        Containers.dropContents(targetLevel, targetPos, soulChest);
+        soulChest.clearContent();
+
         // Move player's inventory items to the Soul Chest slot-to-slot
         boolean transferredAny = false;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
