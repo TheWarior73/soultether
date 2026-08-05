@@ -14,11 +14,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class SoulTetherItem extends Item {
@@ -46,7 +48,7 @@ public class SoulTetherItem extends Item {
     @Override
     public @NonNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        net.minecraft.core.BlockPos pos = context.getClickedPos();
+        BlockPos pos = context.getClickedPos();
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
@@ -72,6 +74,7 @@ public class SoulTetherItem extends Item {
                 }
             }
 
+            // Removing link
             if (isLinkedToThisChest) {
                 CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
                     nbt.remove("x");
@@ -83,8 +86,17 @@ public class SoulTetherItem extends Item {
                 if (player != null) {
                     player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.tooltip.unlinked_pos", pos.getX(), pos.getY(), pos.getZ()));
                     level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
+
+                    // Removing enchantment glint
+                    stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
+
+                    // Removing the Linked Lore Component
+                    stack.set(DataComponents.LORE, ItemLore.EMPTY);
+
                     SoulTether.LOGGER.debug("Unlinked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
                 }
+
+            // Adding the link
             } else {
                 CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
                     nbt.putInt("x", pos.getX());
@@ -98,6 +110,14 @@ public class SoulTetherItem extends Item {
                 if (player != null) {
                     player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.tooltip.linked_pos", pos.getX(), pos.getY(), pos.getZ()));
                     level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
+
+                    // Applying enchantment glint
+                    stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+                    // Adding the Linked Lore Component
+                    ItemLore LinkedTetherLore = getItemLore(pos, player);
+                    stack.set(DataComponents.LORE, LinkedTetherLore);
+
                     SoulTether.LOGGER.debug("linked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
                 }
             }
@@ -105,5 +125,19 @@ public class SoulTetherItem extends Item {
         }
 
         return super.useOn(context);
+    }
+
+    private static @NonNull ItemLore getItemLore(BlockPos pos, Player player) {
+        // Assumes the player is in the same dimension as the right-clicked chest. Uses the local player dimension as a result
+        String localDimString = player.level().dimension().identifier().toString();
+
+        Component LinkedChestComponent = Component.translatable("item.soultether.soul_tether.tooltip.linked_pos", pos.getX(), pos.getY(), pos.getZ());
+        Component LinkedDimComponent = Component.translatable("item.soultether.soul_tether.tooltip.linked_dim", localDimString);
+
+        ArrayList<Component> ComponentList = new ArrayList<>();
+        ComponentList.add(LinkedChestComponent);
+        ComponentList.add(LinkedDimComponent);
+
+        return new ItemLore(ComponentList);
     }
 }

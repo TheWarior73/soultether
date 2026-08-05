@@ -37,13 +37,22 @@ AABB - Axis Aligned Bounding Box
 ## Known Stuff
 
 - Linking to a chest, breaking it and placing another one keeps the link alive - WONTFIX ?
+- Dying twice (with soul tether in inventory but nothing else) drops chest content on ground.  
+  This behaviour is expected and contributes to the fairness of the mod overall.
 
 ## TODO
-- SoulTether enchant glint when linked
+Chest
 - FIX SoulChest GUI
+- Secure SoulChest block & logic
+
+Tether
 - Send a message about dropped items depending on tier
 - Keep item with inventory on death ? (remove item loss chance)
-- Item Breaking Noise on last use
+
+Compatibility
+- Adapt to ModMenu Config Type
+
+Misc
 - Better DEBUG Logs
 - TESTS
 
@@ -51,21 +60,21 @@ AABB - Axis Aligned Bounding Box
 
 - Soul Tether (BASIC)
 
-| ITEM                             | STATUS  | COMMENT                                |
-|----------------------------------|---------|----------------------------------------|
-| Link to chest                    | PASSED  |                                        |
-| Unlink from chest                | FAILED  | FIXME                                  |
-| Link to new chest                | PASSED  |                                        |
-| consume durability on death      | PASSED  | Consumes the item (1 durability total) |
-| Drop item on death               | N/A     | Should be 15% of inventory             |
-| Dimentional cost drop multiplier | N/A     | Should be x2.5                         |
+| ITEM                             | STATUS | COMMENT                                |
+|----------------------------------|--------|----------------------------------------|
+| Link to chest                    | PASSED |                                        |
+| Unlink from chest                | PASSED |                                        |
+| Link to new chest                | PASSED |                                        |
+| consume durability on death      | PASSED | Consumes the item (1 durability total) |
+| Drop item on death               | N/A    | Should be 15% of inventory             |
+| Dimentional cost drop multiplier | N/A    | Should be x2.5                         |
 
 - Soul Tether (IRON)
 
 | ITEM                              | STATUS  | COMMENT                    |
 |-----------------------------------|---------|----------------------------|
 | Link to chest                     | PASSED  |                            |
-| Unlink from chest                 | FAILED  |                            |
+| Unlink from chest                 | PASSED  |                            |
 | Link to new chest                 | PASSED  |                            |
 | consume durability on death       | UNSURE  |                            |
 | Drop item on death                | N/A     | Should be 10% of inventory |
@@ -73,33 +82,36 @@ AABB - Axis Aligned Bounding Box
 
 - Soul Tether (GOLD)
 
-| ITEM                             | STATUS  | COMMENT                   |
-|----------------------------------|---------|---------------------------|
-| Link to chest                    | N/A     |                           |
-| Unlink from chest                | N/A     |                           |
-| Link to new chest                | N/A     |                           |
-| consume durability on death      | N/A     |                           |
-| Drop item on death               | N/A     | Should be 0% of inventory |
-| Dimentional cost drop multiplier | N/A     | Should be x1.25, equiv x1 |
+| ITEM                             | STATUS | COMMENT                   |
+|----------------------------------|--------|---------------------------|
+| Link to chest                    | N/A    |                           |
+| Unlink from chest                | PASSED |                           |
+| Link to new chest                | N/A    |                           |
+| consume durability on death      | N/A    |                           |
+| Drop item on death               | N/A    | Should be 0% of inventory |
+| Dimentional cost drop multiplier | N/A    | Should be x1.25, equiv x1 |
 
 - Soul Tether (DIAMOND)
 
-| ITEM                             | STATUS  | COMMENT                   |
-|----------------------------------|---------|---------------------------|
-| Link to chest                    | N/A     |                           |
-| Unlink from chest                | N/A     |                           |
-| Link to new chest                | N/A     |                           |
-| consume durability on death      | N/A     |                           |
-| Drop item on death               | N/A     | Should be 0% of inventory |
-| Dimentional cost drop multiplier | N/A     | Should be x1              |
+| ITEM                             | STATUS | COMMENT                   |
+|----------------------------------|--------|---------------------------|
+| Link to chest                    | N/A    |                           |
+| Unlink from chest                | PASSED |                           |
+| Link to new chest                | N/A    |                           |
+| consume durability on death      | N/A    |                           |
+| Drop item on death               | N/A    | Should be 0% of inventory |
+| Dimentional cost drop multiplier | N/A    | Should be x1              |
 
 - Soul Chest
 
-| ITEM                                                               | STATUS | COMMENT                   |
-|--------------------------------------------------------------------|--------|---------------------------|
-| Store inventory on death                                           | N/A    |                           |
-| Cannot put stuff inside                                            | N/A    |                           |
-| Drops content on ground if player inventory cannot hold everything | N/A    |                           |
+| ITEM                                                                        | STATUS | COMMENT                   |
+|-----------------------------------------------------------------------------|--------|---------------------------|
+| Store inventory on death                                                    | PASSED |                           |
+| Cannot put stuff inside                                                     | PASSED |                           |
+| Drops content on ground if player inventory cannot hold everything          | N/A    |                           |
+| Does not allow Hopper Inputs                                                | PASSED |                           |
+| Allows Hopper Outputs                                                       | PASSED |                           |
+| Drops content on ground if still present on player death to avoid overrides | PASSED |                           |
 
 - Soul Chest (Secure)
 
