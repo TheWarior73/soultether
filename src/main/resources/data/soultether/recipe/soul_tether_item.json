@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:lead",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "soultether:soul_tether"
+  }
+}

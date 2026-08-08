@@ -44,6 +44,7 @@ AABB - Axis Aligned Bounding Box
 Chest
 - FIX SoulChest GUI
 - Secure SoulChest block & logic
+- Secure SoulChest Crafting Recipe
 
 Tether
 - Send a message about dropped items depending on tier

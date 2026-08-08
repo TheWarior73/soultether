@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#o#",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:diamond",
+    "o": "soultether:soul_tether"
+  },
+  "result": {
+    "id": "soultether:soul_tether_diamond"
+  }
+}
