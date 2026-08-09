@@ -23,7 +23,8 @@ public class SoulChestRenderer implements BlockEntityRenderer<SoulChestBlockEnti
     private final ChestModel model;
     private final SpriteGetter sprites;
     private static final Identifier BLOCK_ATLAS = Identifier.withDefaultNamespace("textures/atlas/blocks.png");
-    private static final SpriteId SPRITE_ID = new SpriteId(BLOCK_ATLAS, Identifier.fromNamespaceAndPath("soultether", "block/soul_chest"));
+    private static final SpriteId SOUL_CHEST_SPRITE_ID = new SpriteId(BLOCK_ATLAS, Identifier.fromNamespaceAndPath("soultether", "block/soul_chest"));
+    private static final SpriteId SECURE_SOUL_CHEST_SPRITE_ID = new SpriteId(BLOCK_ATLAS, Identifier.fromNamespaceAndPath("soultether", "block/secure_soul_chest"));
 
     public SoulChestRenderer(BlockEntityRendererProvider.Context context) {
         this.model = new ChestModel(context.bakeLayer(ModelLayers.CHEST));
@@ -40,6 +41,7 @@ public class SoulChestRenderer implements BlockEntityRenderer<SoulChestBlockEnti
         BlockEntityRenderState.extractBase(entity, state, breakProgress);
         state.facing = entity.getBlockState().getValue(SoulChestBlock.FACING);
         state.open = entity.getOpenNess(tickDelta);
+        state.isSecure = (entity instanceof com.thewarior73.soultether.Blocks.SecureSoulChestBlockEntity);
     }
 
     @Override
@@ -51,6 +53,8 @@ public class SoulChestRenderer implements BlockEntityRenderer<SoulChestBlockEnti
         openness = 1.0F - openness;
         openness = 1.0F - openness * openness * openness;
 
+        SpriteId spriteId = state.isSecure ? SECURE_SOUL_CHEST_SPRITE_ID : SOUL_CHEST_SPRITE_ID;
+
         collector.submitModel(
             this.model,
             openness,
@@ -58,7 +62,7 @@ public class SoulChestRenderer implements BlockEntityRenderer<SoulChestBlockEnti
             state.lightCoords,
             OverlayTexture.NO_OVERLAY,
             -1,
-            SPRITE_ID,
+            spriteId,
             this.sprites,
             0,
             state.breakProgress

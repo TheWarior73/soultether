@@ -59,13 +59,24 @@ public class SoulTetherItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
+            SoulTether.LOGGER.debug(
+                    "++++ SoulTether Used ++++\n" +
+                    "[***                 ***]"
+            );
+
             BlockEntity blockEntity = level.getBlockEntity(pos);
             SecureSoulChestBlockEntity secureChest = (blockEntity instanceof SecureSoulChestBlockEntity s) ? s : null;
 
             if (secureChest != null && player != null) {
+                SoulTether.LOGGER.debug("+++ Secure Chest Detected");
+                SoulTether.LOGGER.debug("Is Player Owner ? {}", secureChest.isOwner(player));
+
                 // Check if someone else owns this secure chest
                 if (secureChest.hasOwner() && !secureChest.isOwner(player)) {
                     player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.owner_locked", secureChest.getOwnerName()));
+
+                    SoulTether.LOGGER.debug("Soul Chest belongs to someone else ! {}", secureChest.getOwnerName());
+
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -115,7 +126,10 @@ public class SoulTetherItem extends Item {
 
             // Adding the link
             } else {
+                SoulTether.LOGGER.debug("is secure chest Null: {}", secureChest == null);
+
                 if (secureChest != null && secureChest.isLinked()) {
+                    SoulTether.LOGGER.debug("is secure chest Linked: {}", secureChest.isLinked());
                     if (player != null) {
                         player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.already_linked"));
                     }

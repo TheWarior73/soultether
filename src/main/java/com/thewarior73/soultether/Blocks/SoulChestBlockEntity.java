@@ -76,8 +76,12 @@ public class SoulChestBlockEntity extends BlockEntity implements Container, Menu
         }
     };
 
+    protected SoulChestBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
     public SoulChestBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.SOUL_CHEST_ENTITY_TYPE, pos, state);
+        this(ModBlocks.SOUL_CHEST_ENTITY_TYPE, pos, state);
     }
 
     @Override

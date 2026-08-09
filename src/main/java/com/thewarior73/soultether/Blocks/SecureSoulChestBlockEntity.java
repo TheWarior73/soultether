@@ -16,7 +16,7 @@ public class SecureSoulChestBlockEntity extends SoulChestBlockEntity {
     private boolean isLinked;
 
     public SecureSoulChestBlockEntity(BlockPos pos, BlockState state) {
-        super(pos, state);
+        super(ModBlocks.SECURE_SOUL_CHEST_ENTITY_TYPE, pos, state);
     }
 
     public UUID getOwnerUUID() {
