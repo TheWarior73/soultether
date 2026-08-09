@@ -124,6 +124,12 @@ public abstract class PlayerMixin {
             return;
         }
 
+        if (soulChest instanceof com.thewarior73.soultether.Blocks.SecureSoulChestBlockEntity secureChest) {
+            if (secureChest.hasOwner() && !secureChest.isOwner(player)) {
+                return;
+            }
+        }
+
         SoulTetherItem tetherItem = (SoulTetherItem) tetherStack.getItem();
         com.thewarior73.soultether.config.ModConfig.TetherTier tier = tetherItem.getTier();
 
@@ -139,6 +145,9 @@ public abstract class PlayerMixin {
         boolean tetherBroke = false;
         if (newDamage >= tetherStack.getMaxDamage()) {
             tetherBroke = true;
+            if (soulChest instanceof com.thewarior73.soultether.Blocks.SecureSoulChestBlockEntity secureChest) {
+                secureChest.setLinked(false);
+            }
             targetLevel.playSound(null, BlockPos.containing(player.position()), TETHER_BREAK.value(), SoundSource.PLAYERS, 0.5f, 1.0f);
             SoulTether.LOGGER.debug("Tether Item Broke !");
         } else {

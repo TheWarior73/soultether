@@ -21,4 +21,6 @@ public class ModBlockIDs {
 
     public static final ResourceKey<Block> SOUL_CHEST = createBlock("soul_chest");
     public static final ResourceKey<BlockEntityType<?>> SOUL_CHEST_ENTITY = createBlockEntity("soul_chest");
+    public static final ResourceKey<Block> SECURE_SOUL_CHEST = createBlock("secure_soul_chest");
+    public static final ResourceKey<BlockEntityType<?>> SECURE_SOUL_CHEST_ENTITY = createBlockEntity("secure_soul_chest");
 }

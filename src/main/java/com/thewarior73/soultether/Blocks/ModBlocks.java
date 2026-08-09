@@ -59,4 +59,20 @@ public class ModBlocks {
             "soul_chest_entity", SoulChestBlockEntity::new, ModBlocks.SOUL_CHEST
     );
     // endregion
+
+    // region secure soul chest
+    public static final Block SECURE_SOUL_CHEST = register(
+            ModBlockIDs.SECURE_SOUL_CHEST,
+            SecureSoulChestBlock::new,
+            BlockBehaviour.Properties.of()
+                    .setId(ModBlockIDs.SECURE_SOUL_CHEST)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+    );
+
+    public static final BlockEntityType<SecureSoulChestBlockEntity> SECURE_SOUL_CHEST_ENTITY_TYPE = register(
+            "secure_soul_chest_entity", SecureSoulChestBlockEntity::new, ModBlocks.SECURE_SOUL_CHEST
+    );
+    // endregion
 }

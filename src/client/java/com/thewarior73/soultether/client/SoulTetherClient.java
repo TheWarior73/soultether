@@ -12,5 +12,6 @@ public class SoulTetherClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		MenuScreens.register(ModMenuTypes.SOUL_CHEST_MENU_TYPE, SoulChestScreen::new);
 		BlockEntityRenderers.register(ModBlocks.SOUL_CHEST_ENTITY_TYPE, SoulChestRenderer::new);
+		BlockEntityRenderers.register(ModBlocks.SECURE_SOUL_CHEST_ENTITY_TYPE, SoulChestRenderer::new);
 	}
 }

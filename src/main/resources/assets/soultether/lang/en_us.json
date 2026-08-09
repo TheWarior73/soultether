@@ -9,7 +9,13 @@
 
   "block.soultether.soul_chest": "Soul Chest",
   "item.soultether.soul_chest": "Soul Chest",
-  "container.soultether.soul_chest": "",
+  "container.soultether.soul_chest": "Soul Chest",
+
+  "block.soultether.secure_soul_chest": "Secure Soul Chest",
+  "item.soultether.secure_soul_chest": "Secure Soul Chest",
+  "container.soultether.secure_soul_chest": "Secure Soul Chest",
+  "block.soultether.secure_soul_chest.owner_locked": "This Soul Chest belongs to %s",
+  "block.soultether.secure_soul_chest.already_linked": "A Soul Tether is already linked to this Soul Chest",
 
   "item.soultether.soul_tether.tooltip.linked_pos": "Linked to Chest: %d, %d, %d",
   "item.soultether.soul_tether.tooltip.linked_dim": "Dimension: %s",

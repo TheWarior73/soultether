@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": ["soultether:soul_chest"]
+  "values": [
+    "soultether:soul_chest",
+    "soultether:secure_soul_chest"
+  ]
 }

@@ -64,6 +64,11 @@ public class ModItems {
             p -> new BlockItem(ModBlocks.SOUL_CHEST, p),
             new Item.Properties()
     );
+    public static final Item SECURE_SOUL_CHEST = register(
+            ModItemIDs.SECURE_SOUL_CHEST,
+            p -> new BlockItem(ModBlocks.SECURE_SOUL_CHEST, p),
+            new Item.Properties()
+    );
     public static final Item THUNDER_STICK = register(
             ModItemIDs.THUNDER_STICK,
             ThunderStickItem::new, new Item.Properties()
@@ -88,6 +93,7 @@ public class ModItems {
 
                 // Blocks
                 output.accept(ModItems.SOUL_CHEST);
+                output.accept(ModItems.SECURE_SOUL_CHEST);
             })
             .build();
 

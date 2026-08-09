@@ -1,5 +1,6 @@
 package com.thewarior73.soultether.Items;
 
+import com.thewarior73.soultether.Blocks.SecureSoulChestBlockEntity;
 import com.thewarior73.soultether.Blocks.SoulChestBlock;
 import com.thewarior73.soultether.SoulTether;
 import com.thewarior73.soultether.TetherLocation;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -57,6 +59,17 @@ public class SoulTetherItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            SecureSoulChestBlockEntity secureChest = (blockEntity instanceof SecureSoulChestBlockEntity s) ? s : null;
+
+            if (secureChest != null && player != null) {
+                // Check if someone else owns this secure chest
+                if (secureChest.hasOwner() && !secureChest.isOwner(player)) {
+                    player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.owner_locked", secureChest.getOwnerName()));
+                    return InteractionResult.SUCCESS;
+                }
+            }
+
             CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
             boolean isLinkedToThisChest = false;
             if (customData != null) {
@@ -64,7 +77,7 @@ public class SoulTetherItem extends Item {
 
                 Optional<TetherLocation> optLocation = TetherLocation.readNbtData(nbt);
 
-                if (TetherLocation.hasLocationData(nbt) &&  optLocation.isPresent()) {
+                if (TetherLocation.hasLocationData(nbt) && optLocation.isPresent()) {
                     BlockPos targetPos = optLocation.get().pos();
                     String dimString = optLocation.get().dimension();
 
@@ -83,6 +96,10 @@ public class SoulTetherItem extends Item {
                     nbt.remove("dimension");
                 });
 
+                if (secureChest != null) {
+                    secureChest.setLinked(false);
+                }
+
                 if (player != null) {
                     player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.tooltip.unlinked_pos", pos.getX(), pos.getY(), pos.getZ()));
                     level.playSound(null, pos, SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS, 0.8f, 1.2f);
@@ -98,6 +115,13 @@ public class SoulTetherItem extends Item {
 
             // Adding the link
             } else {
+                if (secureChest != null && secureChest.isLinked()) {
+                    if (player != null) {
+                        player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.already_linked"));
+                    }
+                    return InteractionResult.SUCCESS;
+                }
+
                 CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
                     nbt.putInt("x", pos.getX());
                     nbt.putInt("y", pos.getY());
@@ -106,6 +130,14 @@ public class SoulTetherItem extends Item {
 
                     SoulTether.LOGGER.debug(nbt.toString());
                 });
+
+                if (secureChest != null && player != null) {
+                    if (!secureChest.hasOwner()) {
+                        secureChest.setOwner(player);
+                    } else {
+                        secureChest.setLinked(true);
+                    }
+                }
 
                 if (player != null) {
                     player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.tooltip.linked_pos", pos.getX(), pos.getY(), pos.getZ()));
