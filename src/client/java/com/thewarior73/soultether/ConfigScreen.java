@@ -55,6 +55,7 @@ public class ConfigScreen extends Screen {
         content.addChild(Button.builder(Component.translatable("gui.soultether.config.reset").withStyle(ChatFormatting.RED),
                 button -> {
                     ModConfig.resetModConfig();
+                    this.onClose();
                 })
                 .width(240)
                 .build());

@@ -27,7 +27,25 @@ public class DimentionalCostMultConfigScreen extends Screen {
 
         content.addChild(new StringWidget(Component.translatable("gui.soultether.config.dimentional_cost_mult.description"), this.font));
 
-        // TODO Multiplier Menu
+        content.addChild(new IntSlider(0, 0, 240, 20,
+                Component.translatable("item.soultether.soul_tether"),
+                1, ModConfig.BASIC.maxUses(), (int) ModConfig.INSTANCE.basicDimCostMult,
+                val -> ModConfig.INSTANCE.basicDimCostMult = val));
+
+        content.addChild(new IntSlider(0, 0, 240, 20,
+                Component.translatable("item.soultether.soul_tether_iron"),
+                1, ModConfig.IRON.maxUses(), (int) ModConfig.INSTANCE.ironDimCostMult,
+                val -> ModConfig.INSTANCE.ironDimCostMult = val));
+
+        content.addChild(new IntSlider(0, 0, 240, 20,
+                Component.translatable("item.soultether.soul_tether_gold"),
+                1, ModConfig.GOLD.maxUses(), (int) ModConfig.INSTANCE.goldDimCostMult,
+                val -> ModConfig.INSTANCE.goldDimCostMult = val));
+
+        content.addChild(new IntSlider(0, 0, 240, 20,
+                Component.translatable("item.soultether.soul_tether_diamond"),
+                1, ModConfig.DIAMOND.maxUses(), (int) ModConfig.INSTANCE.diamondDimCostMult,
+                val -> ModConfig.INSTANCE.diamondDimCostMult = val));
 
         this.layout.addToFooter(Button.builder(CommonComponents.GUI_DONE, button -> this.onClose()).width(200).build());
 
@@ -43,6 +61,8 @@ public class DimentionalCostMultConfigScreen extends Screen {
     @Override
     public void onClose() {
         ModConfig.save();
-        Minecraft.getInstance().gui.setScreen(this.parent);
+        if (this.minecraft != null) {
+            Minecraft.getInstance().gui.setScreen(this.parent);
+        }
     }
 }
