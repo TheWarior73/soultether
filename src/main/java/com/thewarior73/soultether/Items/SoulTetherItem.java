@@ -9,6 +9,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -60,8 +65,11 @@ public class SoulTetherItem extends Item {
             }
 
             SoulTether.LOGGER.debug(
-                    "++++ SoulTether Used ++++\n" +
-                    "[***                 ***]"
+                    """
+                            
+                            ++++ SoulTether Used ++++
+                            [***                 ***]
+                            """
             );
 
             BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -70,12 +78,14 @@ public class SoulTetherItem extends Item {
             if (secureChest != null && player != null) {
                 SoulTether.LOGGER.debug("+++ Secure Chest Detected");
                 SoulTether.LOGGER.debug("Is Player Owner ? {}", secureChest.isOwner(player));
+                SoulTether.LOGGER.debug("IsChestLinked ? {}", secureChest.isLinked());
+
 
                 // Check if someone else owns this secure chest
                 if (secureChest.hasOwner() && !secureChest.isOwner(player)) {
                     player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.owner_locked", secureChest.getOwnerName()));
 
-                    SoulTether.LOGGER.debug("Soul Chest belongs to someone else ! {}", secureChest.getOwnerName());
+                    SoulTether.LOGGER.debug("A tether is already linked! Tether Owner {}", secureChest.getOwnerName());
 
                     return InteractionResult.SUCCESS;
                 }
@@ -83,12 +93,14 @@ public class SoulTetherItem extends Item {
 
             CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
             boolean isLinkedToThisChest = false;
+            Optional<TetherLocation> oldLocation = Optional.empty();
             if (customData != null) {
                 CompoundTag nbt = customData.copyTag();
 
                 Optional<TetherLocation> optLocation = TetherLocation.readNbtData(nbt);
 
                 if (TetherLocation.hasLocationData(nbt) && optLocation.isPresent()) {
+                    oldLocation = optLocation;
                     BlockPos targetPos = optLocation.get().pos();
                     String dimString = optLocation.get().dimension();
 
@@ -107,9 +119,7 @@ public class SoulTetherItem extends Item {
                     nbt.remove("dimension");
                 });
 
-                if (secureChest != null) {
-                    secureChest.setLinked(false);
-                }
+                unlinkPreviousChest(level, oldLocation.get());
 
                 if (player != null) {
                     player.sendOverlayMessage(Component.translatable("item.soultether.soul_tether.tooltip.unlinked_pos", pos.getX(), pos.getY(), pos.getZ()));
@@ -124,17 +134,18 @@ public class SoulTetherItem extends Item {
                     SoulTether.LOGGER.debug("Unlinked: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
                 }
 
-            // Adding the link
             } else {
-                SoulTether.LOGGER.debug("is secure chest Null: {}", secureChest == null);
 
+            // Adding the link
                 if (secureChest != null && secureChest.isLinked()) {
-                    SoulTether.LOGGER.debug("is secure chest Linked: {}", secureChest.isLinked());
                     if (player != null) {
                         player.sendOverlayMessage(Component.translatable("block.soultether.secure_soul_chest.already_linked"));
                     }
                     return InteractionResult.SUCCESS;
                 }
+
+                // If tether was previously linked to a different secure chest, unlink that chest first
+                oldLocation.ifPresent(tetherLocation -> unlinkPreviousChest(level, tetherLocation));
 
                 CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
                     nbt.putInt("x", pos.getX());
@@ -148,9 +159,8 @@ public class SoulTetherItem extends Item {
                 if (secureChest != null && player != null) {
                     if (!secureChest.hasOwner()) {
                         secureChest.setOwner(player);
-                    } else {
-                        secureChest.setLinked(true);
                     }
+                    secureChest.setLinked(true);
                 }
 
                 if (player != null) {
@@ -185,5 +195,30 @@ public class SoulTetherItem extends Item {
         ComponentList.add(LinkedDimComponent);
 
         return new ItemLore(ComponentList);
+    }
+
+    private static void unlinkPreviousChest(Level level, TetherLocation oldLoc) {
+        if (oldLoc == null || level.isClientSide()) {
+            return;
+        }
+        MinecraftServer server = level.getServer();
+        if (server == null) {
+            return;
+        }
+        Identifier dimIdentifier = Identifier.tryParse(oldLoc.dimension());
+        if (dimIdentifier == null) {
+            return;
+        }
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, dimIdentifier);
+        ServerLevel targetLevel = server.getLevel(dimKey);
+        if (targetLevel != null) {
+            BlockPos oldPos = oldLoc.pos();
+            targetLevel.getChunkAt(oldPos);
+            BlockEntity oldBe = targetLevel.getBlockEntity(oldPos);
+            if (oldBe instanceof SecureSoulChestBlockEntity oldSecureChest) {
+                oldSecureChest.setOwner(null);
+                oldSecureChest.setLinked(false);
+            }
+        }
     }
 }

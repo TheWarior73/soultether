@@ -39,8 +39,11 @@ public class SecureSoulChestBlockEntity extends SoulChestBlockEntity {
         if (player != null) {
             this.ownerUUID = player.getUUID();
             this.ownerName = player.getScoreboardName();
-            this.setChanged();
+        } else {
+            this.ownerUUID = null;
+            this.ownerName = null;
         }
+        this.setChanged();
     }
 
     public boolean isLinked() {

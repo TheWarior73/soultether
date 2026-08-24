@@ -39,6 +39,7 @@ AABB - Axis Aligned Bounding Box
 - Linking to a chest, breaking it and placing another one keeps the link alive - WONTFIX ?
 - Dying twice (with soul tether in inventory but nothing else) drops chest content on ground.  
   This behaviour is expected and contributes to the fairness of the mod overall.
+- If a player has the tether of another player, and tries to unlink from a secure chest, the chest won't allow it based on the fact that is it not the same player.
 
 ## TODO
 Chest
@@ -49,6 +50,7 @@ Chest
 Tether
 - Send a message about dropped items depending on tier
 - Keep item with inventory on death ? (remove item loss chance)
+- Add enchants - [Unbreaking, mending]
 
 Compatibility
 - Adapt to ModMenu Config Type
