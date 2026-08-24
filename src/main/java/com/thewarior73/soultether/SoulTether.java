@@ -25,6 +25,8 @@ public class SoulTether implements ModInitializer {
 		// Proceed with mild caution.
 		LOGGER.debug("\n==================================================\nDEBUG Logging Enabled.\n==================================================");
 
+		com.thewarior73.soultether.config.ModConfig.load();
+
 		LOGGER.debug("Initializing Blocks");
 		ModBlocks.initialize();
 

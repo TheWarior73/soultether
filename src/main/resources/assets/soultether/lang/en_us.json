@@ -21,5 +21,16 @@
   "item.soultether.soul_tether.tooltip.linked_dim": "Dimension: %s",
   "item.soultether.soul_tether.tooltip.unlinked_pos": "Unlinked (Right-click Soul Chest to link again)",
 
-  "subtitle.soultether.soul_tether.break": "Soul Tether Breaks"
+  "subtitle.soultether.soul_tether.break": "Soul Tether Breaks",
+
+  "gui.soultether.config.title": "Soul Tether Configuration",
+  "gui.soultether.config.enable_item_loss": "Item Loss on Death",
+  "gui.soultether.config.enable_debug_logs": "Debug Logging",
+  "gui.soultether.config.item_loss_rates": "Configure Item Loss Rates...",
+  "gui.soultether.config.item_loss_rates.title": "Item Loss Rates",
+  "gui.soultether.config.item_loss_rates.description": "Item loss probability on death:",
+  "gui.soultether.config.reset": "Reset Config (This action is irreversible)",
+  "gui.soultether.config.dimentional_cost_mult": "Configure Dimensional Cost Multiplier",
+  "gui.soultether.config.dimentional_cost_mult.title": "Dimensional Cost Multiplier",
+  "gui.soultether.config.dimentional_cost_mult.description": "Dimensional Cost Multiplier for used durability"
 }

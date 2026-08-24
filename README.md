@@ -1,9 +1,5 @@
 # Soul Tether
 
-> MC 26.2 Fabric Documentation   
-> Pull request status : https://github.com/FabricMC/fabric-docs/pull/645  
-> Temporary link : https://deploy-preview-645--nimble-elf-d9d491.netlify.app/develop/items/custom-tools
-
 ## IMPORTANT
 
 src/main/resources contains all the ressources. relative paths from there are :
@@ -53,74 +49,18 @@ Tether
 - Add enchants - [Unbreaking, mending]
 
 Compatibility
-- Adapt to ModMenu Config Type
+- [x] Adapt to ModMenu Config Type
 
 Misc
 - Better DEBUG Logs
 - TESTS
+- [x] Config Screen
+  - [x] Toggle Item Loss probability on death
+  - [x] Toggle Debug stuff (idk if usefull in this case with how we implemented logs...)
+  - [x] Tweak Item Loss probability (subscreen with each tether displayed, on the right a slider that goes from 0 to 100%)
 
-## TESTS
+# Default Behaviour
 
-- Soul Tether (BASIC)
+Durability loss is affected by dimension (deathDim != chestDim -> durabilityLoss * dimMult : durabilityLoss)
 
-| ITEM                             | STATUS | COMMENT                                |
-|----------------------------------|--------|----------------------------------------|
-| Link to chest                    | PASSED |                                        |
-| Unlink from chest                | PASSED |                                        |
-| Link to new chest                | PASSED |                                        |
-| consume durability on death      | PASSED | Consumes the item (1 durability total) |
-| Drop item on death               | N/A    | Should be 15% of inventory             |
-| Dimentional cost drop multiplier | N/A    | Should be x2.5                         |
-
-- Soul Tether (IRON)
-
-| ITEM                              | STATUS  | COMMENT                    |
-|-----------------------------------|---------|----------------------------|
-| Link to chest                     | PASSED  |                            |
-| Unlink from chest                 | PASSED  |                            |
-| Link to new chest                 | PASSED  |                            |
-| consume durability on death       | UNSURE  |                            |
-| Drop item on death                | N/A     | Should be 10% of inventory |
-| Dimentional cost drop multiplier  | N/A     | Should be x1.75            |
-
-- Soul Tether (GOLD)
-
-| ITEM                             | STATUS | COMMENT                   |
-|----------------------------------|--------|---------------------------|
-| Link to chest                    | N/A    |                           |
-| Unlink from chest                | PASSED |                           |
-| Link to new chest                | N/A    |                           |
-| consume durability on death      | N/A    |                           |
-| Drop item on death               | N/A    | Should be 0% of inventory |
-| Dimentional cost drop multiplier | N/A    | Should be x1.25, equiv x1 |
-
-- Soul Tether (DIAMOND)
-
-| ITEM                             | STATUS | COMMENT                   |
-|----------------------------------|--------|---------------------------|
-| Link to chest                    | N/A    |                           |
-| Unlink from chest                | PASSED |                           |
-| Link to new chest                | N/A    |                           |
-| consume durability on death      | N/A    |                           |
-| Drop item on death               | N/A    | Should be 0% of inventory |
-| Dimentional cost drop multiplier | N/A    | Should be x1              |
-
-- Soul Chest
-
-| ITEM                                                                        | STATUS | COMMENT                   |
-|-----------------------------------------------------------------------------|--------|---------------------------|
-| Store inventory on death                                                    | PASSED |                           |
-| Cannot put stuff inside                                                     | PASSED |                           |
-| Drops content on ground if player inventory cannot hold everything          | N/A    |                           |
-| Does not allow Hopper Inputs                                                | PASSED |                           |
-| Allows Hopper Outputs                                                       | PASSED |                           |
-| Drops content on ground if still present on player death to avoid overrides | PASSED |                           |
-
-- Soul Chest (Secure)
-
-| ITEM                                                               | STATUS  | COMMENT                   |
-|--------------------------------------------------------------------|---------|---------------------------|
-| Can only be accessed by owning player                              | N/A     |                           |
-| Store inventory on death                                           | N/A     |                           |
-| Cannot put stuff inside                                            | N/A     |                           |
-| Drops content on ground if player inventory cannot hold everything | N/A     |                           |
+Item loss will occur but won't be affected by dimensional cost

@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"com.thewarior73.soultether.client.SoulTetherClient"
+		],
+		"modmenu": [
+			"com.thewarior73.soultether.ModMenuApiImpl"
 		]
 	},
 	"mixins": [
