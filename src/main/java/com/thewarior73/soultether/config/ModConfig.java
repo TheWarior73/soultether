@@ -22,13 +22,13 @@ public class ModConfig {
 
     public double basicLossRate = 0.15;
     public double ironLossRate = 0.10;
-    public double goldLossRate = 0.0;
+    public double goldLossRate = 0.01;
     public double diamondLossRate = 0.0;
 
-    public double basicDimCostMult = 3.0;
+    public double basicDimCostMult = 1.0;
     public double ironDimCostMult = 2.0;
-    public double goldDimCostMult = 1.0;
-    public double diamondDimCostMult = 1.0;
+    public double goldDimCostMult = 3.0;
+    public double diamondDimCostMult = 5.0;
 //  #endregion
 
     public record TetherTier(int maxUses, double defaultLossRate, double defaultDimensionalCostMultiplier) {
@@ -38,10 +38,10 @@ public class ModConfig {
         public double dimensionalCostMultiplier() { return ModConfig.getEffectiveDimensionalCostMultiplier(this); }
     }
 
-    public static final TetherTier BASIC = new TetherTier(1, 0.15, 3.0);
+    public static final TetherTier BASIC = new TetherTier(1, 0.15, 1.0);
     public static final TetherTier IRON = new TetherTier(10, 0.10, 2.0);
-    public static final TetherTier GOLD = new TetherTier(5, 0.0, 1.0);
-    public static final TetherTier DIAMOND = new TetherTier(25, 0.0, 1.0);
+    public static final TetherTier GOLD = new TetherTier(5, 0.01, 3.0);
+    public static final TetherTier DIAMOND = new TetherTier(25, 0.0, 5.0);
 
     public static double getEffectiveLossRate(TetherTier tier) {
         if (INSTANCE == null || !INSTANCE.enableItemLoss) {
@@ -56,13 +56,13 @@ public class ModConfig {
 
     public static double getEffectiveDimensionalCostMultiplier(TetherTier tier) {
         if (INSTANCE == null) {
-            return 0.0;
+            return tier.defaultDimensionalCostMultiplier();
         }
         if (tier == BASIC) return INSTANCE.basicDimCostMult;
         if (tier == IRON) return INSTANCE.ironDimCostMult;
         if (tier == GOLD) return INSTANCE.goldDimCostMult;
         if (tier == DIAMOND) return INSTANCE.diamondDimCostMult;
-        return tier.defaultLossRate();
+        return tier.defaultDimensionalCostMultiplier();
     }
 
     public static void resetModConfig() {
@@ -71,13 +71,13 @@ public class ModConfig {
 
         INSTANCE.basicLossRate = 0.15;
         INSTANCE.ironLossRate = 0.10;
-        INSTANCE.goldLossRate = 0.0;
+        INSTANCE.goldLossRate = 0.01;
         INSTANCE.diamondLossRate = 0.0;
 
-        INSTANCE.basicDimCostMult = 3.0;
+        INSTANCE.basicDimCostMult = 1.0;
         INSTANCE.ironDimCostMult = 2.0;
-        INSTANCE.goldDimCostMult = 1.0;
-        INSTANCE.diamondDimCostMult = 1.0;
+        INSTANCE.goldDimCostMult = 3.0;
+        INSTANCE.diamondDimCostMult = 5.0;
 
         save();
     }
