@@ -31,34 +31,47 @@ AABB - Axis Aligned Bounding Box
 ## Known Stuff
 
 - Linking to a chest, breaking it and placing another one keeps the link alive - WONTFIX ?
-- Dying twice (with soul tether in inventory but nothing else) drops chest content on ground.  
+- Dying with soul tether in inventory drops chest content on the ground if any items were left in it.  
   This behaviour is expected and contributes to the fairness of the mod overall.
 - If a player has the tether of another player, and tries to unlink from a secure chest, the chest won't allow it based on the fact that is it not the same player.
 
 ## TODO
 Chest
 - FIX SoulChest GUI
-- Secure SoulChest block & logic
 - Secure SoulChest Crafting Recipe
+- SoulChest & Secure variant Textures (refactor)
 
 Tether
 - Send a message about dropped items depending on tier
-- Keep item with inventory on death ? (remove item loss chance)
 - Add enchants - [Unbreaking, mending]
+- Include tether in drop chance instead of guaranted drop ?
 
-Compatibility
-- [x] Adapt to ModMenu Config Type
+Compatibility  
+N/A
 
 Misc
 - Better DEBUG Logs
 - TESTS
-- [x] Config Screen
-    - [x] Toggle Item Loss probability on death
-    - [x] Toggle Debug stuff (idk if usefull in this case with how we implemented logs...)
-    - [x] Tweak Item Loss probability (subscreen with each tether displayed, on the right a slider that goes from 0 to 100%)
 
 # Default Behaviour
 
-Durability loss is affected by dimension (deathDim != chestDim -> durabilityLoss * dimMult : durabilityLoss)
+By default, Durability cost for each tier of tether is `1`.  
+If the soul chest (or Secure soul chest) is in a different dimension as the player on death,
+the following durability costs take effect :
+```
+Basic   -> 1 (unchanged)
+Iron    -> 2
+Gold    -> 3
+Diamond -> 5
+```
 
-Item loss will occur but won't be affected by dimensional cost
+Durability of tethers by tier is :
+```
+Basic   -> 1
+Iron    -> 10
+Gold    -> 5
+Diamond -> 25
+```
+
+> [!NOTE]
+> Item loss will occur but won't be affected by dimensional cost
