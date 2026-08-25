@@ -44,7 +44,7 @@ Chest
 Tether
 - Send a message about dropped items depending on tier
 - Add enchants - [Unbreaking, mending]
-- Include tether in drop chance instead of guaranted drop ?
+- Include tether in drop chance instead of guaranteed drop ?
 
 Compatibility  
 N/A
