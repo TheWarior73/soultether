@@ -3,7 +3,7 @@
 	"id": "soultether",
 	"version": "${version}",
 	"name": "Soul Tether",
-	"description": "Transports your inventory to a chosen location on death.",
+	"description": "Transports your inventory somewhere safe on death.",
 	"authors": [
 		"TheWarior73"
 	],

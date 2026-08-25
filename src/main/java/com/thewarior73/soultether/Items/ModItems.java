@@ -69,10 +69,6 @@ public class ModItems {
             p -> new BlockItem(ModBlocks.SECURE_SOUL_CHEST, p),
             new Item.Properties()
     );
-    public static final Item THUNDER_STICK = register(
-            ModItemIDs.THUNDER_STICK,
-            ThunderStickItem::new, new Item.Properties()
-    );
 
     // region Creative Tab Item register
 
@@ -89,7 +85,6 @@ public class ModItems {
                 output.accept(ModItems.SOUL_TETHER_IRON);
                 output.accept(ModItems.SOUL_TETHER_GOLD);
                 output.accept(ModItems.SOUL_TETHER_DIAMOND);
-                output.accept(ModItems.THUNDER_STICK);
 
                 // Blocks
                 output.accept(ModItems.SOUL_CHEST);

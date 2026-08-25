@@ -17,5 +17,4 @@ public class ModItemIDs {
     public static final ResourceKey<Item> SOUL_TETHER_DIAMOND = create("soul_tether_diamond");
     public static final ResourceKey<Item> SOUL_CHEST = create("soul_chest");
     public static final ResourceKey<Item> SECURE_SOUL_CHEST = create("secure_soul_chest");
-    public static final ResourceKey<Item> THUNDER_STICK = create("thunder_stick");
 }

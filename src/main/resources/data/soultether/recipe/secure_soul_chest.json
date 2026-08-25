@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x#x",
+    "#o#",
+    "x#x"
+  ],
+  "key": {
+    "#": "minecraft:redstone",
+    "o": "soultether:soul_chest",
+    "x": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "soultether:secure_soul_chest"
+  }
+}
